@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kfukuzumi1119-debug.github.io/atsugi-kids/sitemap.xml
+Sitemap: https://kfukuzumi1119-debug.github.io/ponchi-e/sitemap.xml
