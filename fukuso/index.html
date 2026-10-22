@@ -68,6 +68,12 @@ button,select,input{font:inherit;color:inherit}
 .tab{flex:1;background:none;border:0;border-right:1px solid var(--line);padding:8px 4px;cursor:pointer;font-size:14px;color:var(--muted)}
 .tab:last-child{border-right:0}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.who{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--line);background:var(--paper);flex:1 1 240px;max-width:360px}
+.seg button{flex:1;background:none;border:0;border-right:1px solid var(--line);padding:7px 4px;cursor:pointer;font-size:14px;color:var(--muted)}
+.seg button:last-child{border-right:0}
+.seg button[aria-checked="true"]{background:var(--accent);color:var(--paper);font-weight:700}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .board{background:var(--paper);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
 .verdict{padding:18px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted)}
@@ -137,6 +143,11 @@ footer a{color:var(--accent)}
   </div>
   <div class="results" id="results"></div>
 
+  <div class="who">
+    <span class="eyebrow">だれの服？</span>
+    <div class="seg" role="radiogroup" aria-label="だれの服" id="who"></div>
+  </div>
+
   <div class="tabs" role="tablist" id="tabs"></div>
 
   <div id="main">
@@ -159,7 +170,7 @@ footer a{color:var(--accent)}
         <tr><td>5℃以下</td><td>厚手のニット＋保温インナー2枚</td><td>ダウン＋マフラー・手袋</td></tr>
       </tbody>
     </table></div>
-    <p style="margin-top:8px">上着は、日中ではなく朝（7〜9時）と夜（18〜21時）の体感温度の低いほうで選ぶと、行き帰りに寒い思いをしません。子どもはよく動くので、大人より1枚少なめが目安です。</p>
+    <p style="margin-top:8px">上着は、日中ではなく朝（7〜9時）と夜（18〜21時）の体感温度の低いほうで選ぶと、行き帰りに寒い思いをしません。子どもはよく動くので、大人より1枚少なめが目安です。上の「だれの服？」で男性・女性・子どもを切り替えると、それぞれに合った服の名前で提案します。</p>
   </section>
 
   <footer>
@@ -182,6 +193,8 @@ const WEEK = "日月火水木金土";
 
 let place = load() || {name:"厚木",lat:35.4433,lon:139.3625};
 let data = null, dayIdx = 0;
+let who = (() => { try{ return localStorage.getItem("fukuso-who"); }catch(e){ return null; } })();
+if(!["m","f","k"].includes(who)) who = "m";
 
 function load(){ try{ return JSON.parse(localStorage.getItem("fukuso-place")); }catch(e){ return null; } }
 function save(){ try{ localStorage.setItem("fukuso-place", JSON.stringify(place)); }catch(e){} }
@@ -230,6 +243,16 @@ $("searchForm").addEventListener("submit", async e => {
   }catch(err){ $("results").innerHTML = `<span class="eyebrow">検索できませんでした。通信状態を確かめてください。</span>`; }
 });
 
+// だれの服
+function fillWho(){
+  const el = $("who");
+  el.innerHTML = ["m","f","k"].map(k => `<button type="button" role="radio" aria-checked="${k===who}" data-k="${k}">${WHO[k].label}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    who = b.dataset.k; try{ localStorage.setItem("fukuso-who", who); }catch(e){}
+    fillWho(); render();
+  }));
+}
+
 // 日付タブ
 function fillTabs(){
   const t = $("tabs");
@@ -262,41 +285,45 @@ async function fetchWeather(){
 // ---- 服装を決める ----
 function avg(a){ return a.reduce((s,x)=>s+x,0)/a.length; }
 
-function topWear(t){
-  if(t>=27) return ["半袖Tシャツ・通気のいいシャツ","汗をかきやすいので、乾きやすい素材がらく"];
-  if(t>=23) return ["半袖、または薄手の長袖シャツ","日中は半袖で十分な暖かさ"];
-  if(t>=19) return ["長袖シャツ・カットソー","長袖1枚でちょうどいい気温"];
-  if(t>=15) return ["長袖シャツ＋薄手のニット","1枚だと少し肌寒い"];
-  if(t>=11) return ["ニット・スウェット","しっかり暖かいトップスを"];
-  if(t>=6)  return ["厚手のニット＋あったか肌着","中に1枚、保温インナーを"];
-  return ["厚手のニット＋保温インナー2枚重ね","重ね着でしっかり防寒"];
-}
-function outerWear(t){
-  if(t>=21) return ["いらない",""];
-  if(t>=17) return ["カーディガン・薄手のシャツジャケット","朝晩用に持っておくと安心"];
-  if(t>=13) return ["ジャケット・トレンチコート・パーカー","朝晩はひんやりする"];
-  if(t>=9)  return ["ウールのコート・中わたジャケット","上着なしだと寒い"];
-  if(t>=4)  return ["ダウン・厚手のコート","冬の寒さ"];
-  return ["ダウン＋マフラー・手袋","体の芯から冷える寒さ"];
-}
-function bottom(t){
-  if(t>=26) return "薄手のパンツ・スカート・ハーフパンツ";
-  if(t>=12) return "長ズボン・スカート";
-  if(t>=8)  return "厚手のパンツ・タイツ";
-  return "裏起毛のパンツ・厚手タイツ";
-}
+// 区切り：トップス[27,23,19,15,11,6]、上着[21,17,13,9,4]、ボトムス[26,12,8]（℃・体感）
+const WHO = {
+  m:{label:"男性",
+    top:["半袖Tシャツ・ポロシャツ・リネンシャツ","半袖シャツ、または薄手の長袖シャツ","長袖シャツ・ロンT","長袖シャツ＋薄手のニット・スウェット","ニット・スウェット・ネルシャツ","厚手のニット＋あったかインナー","厚手のニット＋保温インナー2枚重ね"],
+    outer:["カーディガン・シャツジャケット・薄手のブルゾン","ジャケット・マウンテンパーカー・ステンカラーコート","ウールのコート・中わたジャケット","ダウン・厚手のコート","ダウン＋マフラー・手袋"],
+    bottom:["ハーフパンツ・薄手のチノパン","チノパン・スラックス・デニム","厚手のパンツ・コーデュロイ","裏起毛のパンツ（中に保温タイツも）"],
+    shoes:{hot:"サンダル・スニーカー",normal:"スニーカー・革靴などいつもの靴",wet:"濡れても平気な靴",rain:"防水の靴・レインブーツ",snow:"滑りにくい靴・ブーツ"},
+    scarf:"マフラー・手袋"},
+  f:{label:"女性",
+    top:["半袖Tシャツ・ノースリーブ・リネンのブラウス","半袖ブラウス、または薄手の長袖","長袖ブラウス・カットソー","長袖カットソー＋薄手のニット","ニット・スウェット・タートルネック","厚手のニット＋あったかインナー","厚手のニット＋保温インナー2枚重ね"],
+    outer:["カーディガン・シャツジャケット","トレンチコート・ジャケット・ノーカラーコート","ウールのコート・キルティングコート","ダウン・ロングコート","ロングダウン＋マフラー・手袋"],
+    bottom:["薄手のワイドパンツ・スカート・ワンピース","パンツ・スカート（素足かストッキング）","厚手のパンツ、またはスカート＋タイツ","裏起毛のパンツ・厚手のタイツ（80デニール以上）"],
+    shoes:{hot:"サンダル・スニーカー",normal:"スニーカー・パンプスなどいつもの靴",wet:"濡れても平気な靴",rain:"レインブーツ・防水スニーカー",snow:"滑りにくいブーツ"},
+    scarf:"マフラー・手袋"},
+  k:{label:"子ども",
+    top:["半袖Tシャツ（汗をすうコットン）","半袖Tシャツ","長袖Tシャツ、または半袖＋薄い羽織り","長袖Tシャツ・トレーナー","トレーナー・薄手のフリース","トレーナー＋あったか肌着","厚手のトレーナー＋あったか肌着"],
+    outer:["薄手のパーカー・カーディガン（暑ければ脱げるもの）","パーカー・ウインドブレーカー","フリースジャケット・薄手のダウン","ダウンジャケット","ダウン＋帽子・手袋・ネックウォーマー"],
+    bottom:["半ズボン・スカート","長ズボン・レギンス","厚手の長ズボン・タイツ","裏起毛のズボン・タイツ"],
+    shoes:{hot:"運動靴（サンダルは走りにくいので公園には不向き）",normal:"運動靴",wet:"濡れても平気な運動靴",rain:"長靴",snow:"長靴・スノーブーツ"},
+    scarf:"手袋・ネックウォーマー（マフラーは引っかかりやすい）"}
+};
+const TOP_WHY = ["汗をかきやすいので、乾きやすい素材がらく","日中は半袖で十分な暖かさ","長袖1枚でちょうどいい気温","1枚だと少し肌寒い","しっかり暖かいトップスを","中に1枚、保温インナーを","重ね着でしっかり防寒"];
+const OUTER_WHY = ["朝晩用に持っておくと安心","朝晩はひんやりする","上着なしだと寒い","冬の寒さ","体の芯から冷える寒さ"];
+const band = (t, cuts) => { const i = cuts.findIndex(c => t>=c); return i<0 ? cuts.length : i; };
+function topWear(t, w){ const i = band(t,[27,23,19,15,11,6]); return [WHO[w].top[i], TOP_WHY[i]]; }
+function outerWear(t, w){ const i = band(t,[21,17,13,9,4]); return i===0 ? ["いらない",""] : [WHO[w].outer[i-1], OUTER_WHY[i-1]]; }
+function bottom(t, w){ return WHO[w].bottom[band(t,[26,12,8])]; }
 function headline(day, outerT){
   if(day>=30) return ["真夏の暑さ。とにかく涼しく","熱中症に気をつけて、帽子と飲み物を。"];
   if(day>=26) return ["半袖でいい日","日中は汗ばむ暑さ。"];
   if(day>=22) return outerT<19 ? ["半袖＋羽織りものの日","昼は暑いくらい、朝晩は少しひんやり。"] : ["半袖か薄い長袖の日","1日を通して過ごしやすい気温。"];
-  if(day>=19) return outerT<17 ? ["長袖＋カーディガンの日","昼は長袖1枚、朝晩に1枚足して。"] : ["長袖1枚の日","上着がなくても過ごせそう。"];
+  if(day>=19) return outerT<17 ? ["長袖＋羽織りものの日","昼は長袖1枚、朝晩に1枚足して。"] : ["長袖1枚の日","上着がなくても過ごせそう。"];
   if(day>=15) return ["薄手の上着がほしい日","長袖だけだと少し肌寒い。"];
   if(day>=11) return ["コートを出す日","ニットに上着を重ねて。"];
   if(day>=6)  return ["しっかり冬の装い","厚手のコートとインナーで。"];
   return ["真冬の防寒をする日","マフラーや手袋も忘れずに。"];
 }
 
-function plan(i){
+function plan(i, who){
   const H = data.hourly, D = data.daily, s = i*24;
   const hr = (a,b,k) => H[k].slice(s+a, s+b+1).filter(v => v!=null);
   const dayFeel = avg(hr(10,17,"apparent_temperature"));
@@ -311,21 +338,27 @@ function plan(i){
   const code = D.weather_code[i];
   const snow = [71,73,75,77,85,86].includes(code);
 
-  const [tp, tpWhy] = topWear(dayFeel);
-  const [ot, otWhy] = outerWear(outerT);
+  // 子どもはよく動くので、体感を3℃高く見て大人より1枚少なめにする
+  const kid = who==="k", adj = kid ? 3 : 0;
+  const dayT = dayFeel+adj, outT = outerT+adj, sh = WHO[who].shoes;
+  const [tp, tpWhy] = topWear(dayT, who);
+  const [ot, otWhy] = outerWear(outT, who);
   const items = [
-    ["トップス", tp, `日中の体感 ${r0(dayFeel)}℃。${tpWhy}`],
+    ["トップス", tp, `日中の体感 ${r0(dayFeel)}℃。${kid ? "大人より1枚少なめで" : tpWhy}`],
     ["上着", ot, ot==="いらない" ? `朝晩も体感 ${r0(outerT)}℃くらい` : `朝晩の体感 ${r0(outerT)}℃。${otWhy}`],
-    ["ボトムス", bottom((dayFeel+outerT)/2), ""],
-    ["足もと", snow ? "滑りにくい靴・ブーツ" : rainSum>=5 ? "防水の靴・レインブーツ" : rainP>=50 ? "濡れても平気な靴" : (dayFeel>=27 ? "サンダル・スニーカー" : "スニーカーなどいつもの靴"),
+    ["ボトムス", bottom((dayT+outT)/2, who), ""],
+    ["足もと", snow ? sh.snow : rainSum>=5 ? sh.rain : rainP>=50 ? sh.wet : (dayT>=27 ? sh.hot : sh.normal),
       snow ? "雪の予報" : rainSum>=5 ? `1日の雨量 ${rainSum.toFixed(1)}mm` : ""],
   ];
   let bring = [];
-  if(rainP>=50) bring.push("傘"); else if(rainP>=30) bring.push("折りたたみ傘");
-  if(uv>=6) bring.push("日焼け止め・帽子"); else if(uv>=3 && dayFeel>=20) bring.push("日焼け止め");
-  if(outerT<6) bring.push("マフラー・手袋");
-  if(hi>=28) bring.push("飲み物・汗ふき");
-  if(hi-lo>=8 && ot!=="いらない") bring.push("脱いでしまえる袋やバッグ");
+  if(rainP>=50) bring.push(kid ? "傘・レインコート" : "傘"); else if(rainP>=30) bring.push("折りたたみ傘");
+  if(kid){ if(uv>=3 || dayFeel>=25) bring.push("帽子"); }
+  else if(uv>=6) bring.push(who==="f" ? "日焼け止め・日傘" : "日焼け止め・帽子");
+  else if(uv>=3 && dayFeel>=20) bring.push("日焼け止め");
+  if(outT<6) bring.push(WHO[who].scarf);
+  if(hi>=28) bring.push(kid ? "水筒・汗ふきタオル" : "飲み物・汗ふき");
+  if(kid && (dayFeel>=22 || rainP>=50)) bring.push("着替え1組");
+  if(hi-lo>=8 && ot!=="いらない") bring.push(kid ? "脱いだ上着を入れる袋" : "脱いでしまえる袋やバッグ");
   if(bring.length) items.push(["持ち物", bring.join("、"), rainP>=30 ? `雨の確率 最大 ${rainP}%` : ""]);
 
   const notes = [];
@@ -336,9 +369,10 @@ function plan(i){
   else if(wind>=5 && dayFeel<18) notes.push(["", `やや風あり（最大 ${r0(wind)}m/s）。首もとを覆えるとあたたか。`]);
   if(uv>=8) notes.push(["w", `紫外線がとても強い（UV ${uv.toFixed(0)}）。長袖の薄手羽織りや日傘も。`]);
   if(hi>=31) notes.push(["w", "熱中症に注意。こまめに水分をとって。"]);
-  notes.push(["", dayFeel>=20 ? "子どもは大人より1枚少なめでOK。汗をかいたときの着替えがあると安心。" : "子どもは大人より1枚少なめが目安。脱ぎ着しやすい前開きの上着が便利。"]);
+  if(kid) notes.push(["", dayFeel>=20 ? "よく動くので大人より1枚少なめにしています。汗をかいたら着替えを。" : "よく動くので大人より1枚少なめにしています。脱ぎ着しやすい前開きの上着が便利。"]);
+  else if(who==="f" && outT<13) notes.push(["", "足首やひざが冷えやすい日。スカートならタイツを合わせて。"]);
 
-  return {hi, lo, dayFeel, mornFeel, eveFeel, rainP, wind, uv, code, items, notes, head:headline(dayFeel, outerT)};
+  return {hi, lo, dayFeel, mornFeel, eveFeel, rainP, wind, uv, code, items, notes, head:headline(dayT, outT)};
 }
 function rainTime(i){
   const H = data.hourly, s = i*24; const hrs = [];
@@ -350,14 +384,14 @@ function rainTime(i){
 // ---- 表示 ----
 function render(){
   if(!data) return;
-  const p = plan(dayIdx);
+  const p = plan(dayIdx, who);
   const d = new Date(data.daily.time[dayIdx]+"T00:00");
   $("date").textContent = `${place.name}　${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WEEK[d.getDay()]}）`;
   $("main").innerHTML = `
   <div style="display:flex;flex-direction:column;gap:18px">
     <div class="board">
       <div class="verdict">
-        <div class="eyebrow">${DAYNAME[dayIdx]}の服装</div>
+        <div class="eyebrow">${DAYNAME[dayIdx]}の服装（${WHO[who].label}）</div>
         <h2>${p.head[0]}</h2>
         <p>${p.head[1]}</p>
       </div>
@@ -374,7 +408,7 @@ function render(){
     </div>
 
     <section>
-      <h3>着ていくもの<span>大人の目安</span></h3>
+      <h3>着ていくもの<span>${WHO[who].label}の目安</span></h3>
       <ul class="outfit">
         ${p.items.map(([k,v,why]) => `<li><span class="k">${k}</span><span class="v">${v}${why?`<span class="why">${why}</span>`:""}</span></li>`).join("")}
       </ul>
@@ -426,7 +460,7 @@ function chart(i){
 
 // 夜（19時以降）に開いたら明日を最初に見せる
 if(new Date().getHours()>=19) dayIdx = 1;
-fillSelect(); fillTabs(); fetchWeather();
+fillSelect(); fillWho(); fillTabs(); fetchWeather();
 </script>
 </body>
 </html>
