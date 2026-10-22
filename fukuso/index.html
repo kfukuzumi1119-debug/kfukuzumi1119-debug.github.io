@@ -104,6 +104,23 @@ section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing
 .chart svg{display:block;width:100%;min-width:520px;height:auto}
 .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);padding:0 12px 6px}
 .legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+.coord{background:var(--paper);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr)}
+.coord figure{margin:0;border-right:1px solid var(--line);display:flex;flex-direction:column}
+.coord img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;max-width:100%;background:var(--bg)}
+.coord figcaption{font-size:11px;color:var(--muted);padding:4px 8px}
+.coord figcaption a{color:var(--muted)}
+.coord .body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.coord .num{font-size:12px;color:var(--muted);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.coord .ttl{margin:0;font-size:17px;font-weight:700;line-height:1.5}
+.coord .desc{margin:0;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px 12px;margin:0;padding:0;list-style:none;font-size:12px;color:var(--muted)}
+.chips li{display:flex;align-items:center;gap:5px}
+.chips i{width:16px;height:16px;border:1px solid var(--line);display:inline-block;flex:none}
+.season{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.season p{margin:0;font-size:13px;color:var(--muted)}
+.change{align-self:flex-start;background:var(--ink);color:var(--paper);border:0;border-radius:2px;padding:9px 20px;font-weight:700;cursor:pointer;letter-spacing:.06em}
+.change:hover{background:var(--accent)}
+.change:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .status{background:var(--paper);border:1px solid var(--line);padding:14px 16px;color:var(--muted)}
 .status.err{color:var(--warn);border-color:var(--warn)}
 .guide p{margin:0 0 8px;color:var(--muted);font-size:14px}
@@ -119,9 +136,13 @@ footer a{color:var(--accent)}
   .board{grid-template-columns:1fr}
   .verdict{border-right:0;border-bottom:1px solid var(--line)}
   .verdict h2{font-size:21px}
+  .coord{grid-template-columns:minmax(0,150px) minmax(0,1fr)}
+  .coord .body{padding:12px;gap:10px}
+  .coord .ttl{font-size:15px}
   .outfit li{grid-template-columns:4.5em minmax(0,1fr);padding:10px 12px}
 }
-@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}}
+@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}.coord img{animation:fade .3s ease-out}}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
 @keyframes in{from{transform:translateY(4px)}to{transform:none}}
 </style>
 </head>
@@ -248,7 +269,7 @@ function fillWho(){
   const el = $("who");
   el.innerHTML = ["m","f","k"].map(k => `<button type="button" role="radio" aria-checked="${k===who}" data-k="${k}">${WHO[k].label}</button>`).join("");
   el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-    who = b.dataset.k; try{ localStorage.setItem("fukuso-who", who); }catch(e){}
+    who = b.dataset.k; coordIdx = 0; try{ localStorage.setItem("fukuso-who", who); }catch(e){}
     fillWho(); render();
   }));
 }
@@ -261,7 +282,7 @@ function fillTabs(){
     if(data){ const d = new Date(data.daily.time[i]+"T00:00"); label += `（${d.getMonth()+1}/${d.getDate()} ${WEEK[d.getDay()]}）`; }
     return `<button class="tab" role="tab" type="button" aria-selected="${i===dayIdx}" data-i="${i}">${label}</button>`;
   }).join("");
-  t.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => { dayIdx = +b.dataset.i; fillTabs(); render(); }));
+  t.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => { dayIdx = +b.dataset.i; coordIdx = 0; fillTabs(); render(); }));
 }
 
 function showStatus(msg, err){ $("main").innerHTML = `<div class="status${err?" err":""}">${esc(msg)}</div>`; }
@@ -280,6 +301,106 @@ async function fetchWeather(){
   }catch(err){
     showStatus("天気を読み込めませんでした。インターネットにつながっているか確かめて、ページを開き直してください。", true);
   }
+}
+
+// ---- おすすめコーデ（写真は Unsplash。img/ に保存） ----
+// g：人＋段階（1=夏 2=半袖＋羽織り 3=長袖＋薄い上着 4=コート 5=ダウン）。t：s=春らしい色 a=秋らしい色
+const C = (n,h) => [n,h];
+const COORDS = [
+ {g:"m1",id:"zZxQm6td7CY",ttl:"ストライプシャツ×白ショーツ",d:"細いストライプの長袖シャツを腕まくりして、白のショートパンツ。黒のスニーカーで引き締める。",c:[C("サックス","#9fb7d6"),C("白","#f4f3ef"),C("黒","#222222")]},
+ {g:"m1",id:"cp4ucXlnhYw",ttl:"柄シャツ×白パンツ",d:"小さな柄の半袖シャツに、白のパンツと白スニーカー。ベージュのベルトでほどよく締める。",c:[C("白","#f4f3ef"),C("ベージュ","#c9b08a"),C("グレー","#9a9a96")]},
+ {g:"m1",id:"tYUlr7Lknf8",ttl:"レトロ柄シャツ×チノパン",d:"ベージュ系の柄の半袖シャツに、同じ系統の色のチノパン。色をそろえると大人っぽい。",c:[C("ベージュ","#cdb48a"),C("ブラウン","#7a5b3c"),C("黒","#222222")]},
+ {g:"m2",id:"SsRQHmTm4QI",t:"a",ttl:"ブラウンの半袖シャツ×白T",d:"白Tの上に、ブラウンの半袖シャツを前を開けて羽織る。暑くなったら脱いで白T1枚に。",c:[C("ブラウン","#8a4f22"),C("白","#f4f3ef")]},
+ {g:"m2",id:"XMiyOo5oEnU",ttl:"黒のシャツジャケット×黒T",d:"黒の半袖シャツジャケットを黒Tに重ねたワントーン。ゆったりした形で涼しく見える。",c:[C("黒","#222222"),C("チャコール","#3d3f43")]},
+ {g:"m2",id:"bXsENzFhuOM",ttl:"白T×シャツの羽織り",d:"白Tに薄いベージュのシャツを羽織って、黒のパンツ。朝晩はシャツの前を閉じて調整。",c:[C("白","#f4f3ef"),C("ベージュ","#d8cbb5"),C("黒","#222222")]},
+ {g:"m3",id:"nzm5waLKnYs",t:"a",ttl:"キャメルのケーブルニット",d:"キャメルのケーブル編みニットに黒のマフラー。秋らしい色を1枚で主役に。",c:[C("キャメル","#b98552"),C("黒","#222222")]},
+ {g:"m3",id:"d54wbtjedog",t:"a",ttl:"スエードジャケット×デニム",d:"ブラウンのスエードジャケットに黒シャツとデニム。靴もブラウンでそろえる。",c:[C("ブラウン","#8a5530"),C("黒","#222222"),C("インディゴ","#3f5a86")]},
+ {g:"m3",id:"UNSj7BtOK0Q",t:"s",ttl:"デニムジャケット×柄シャツ",d:"色落ちしたデニムジャケットに柄シャツ。軽い色で春らしく。",c:[C("ライトブルー","#9fbad6"),C("白","#f4f3ef")]},
+ {g:"m3",id:"9_iWyBNNveY",t:"s",ttl:"水色カーディガン×白シャツ",d:"白シャツに水色のカーディガンを重ねて、デニムで軽やかに。",c:[C("水色","#a9c6e0"),C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
+ {g:"m4",id:"-au3XMzfhro",t:"a",ttl:"キャメルコート×タートルネック",d:"キャメルのチェスターコートに、ブラウンのタートルネック。同じ系統の色で重ねると上品。",c:[C("キャメル","#c19a73"),C("ブラウン","#7a5236"),C("こげ茶","#3b2a20")]},
+ {g:"m4",id:"rlqU2nuEbJQ",ttl:"アイボリーのロングコート",d:"明るいアイボリーのダブルのロングコート。中を黒でまとめるとコートが引き立つ。",c:[C("アイボリー","#e8dfd0"),C("黒","#222222")]},
+ {g:"m4",id:"HOTWXfbII6k",ttl:"グレーのジャケット×マフラー",d:"グレーのジャケットとパンツに、ブラウンのマフラー。寒い朝はマフラーで調整。",c:[C("グレー","#6b6d70"),C("ブラウン","#6b4f3a"),C("チャコール","#3d3f43")]},
+ {g:"m5",id:"bX2NLMut42M",ttl:"黒のダウン×グレーのパーカー",d:"黒のダウンの下にグレーのパーカー。黒のパンツに白スニーカーで足もとを明るく。",c:[C("黒","#222222"),C("グレー","#8d8f92"),C("白","#f4f3ef")]},
+ {g:"m5",id:"Dq8CslLQbRc",ttl:"ネイビーの中わたジャケット",d:"ネイビーの中わたジャケットにデニム。紺と青の濃淡で落ち着いた印象。",c:[C("ネイビー","#24365a"),C("インディゴ","#3f5a86")]},
+ {g:"f1",id:"zEQ_uxOYCJk",ttl:"白シャツ×黒ショートパンツ",d:"白のシャツをさらっと着て、黒のショートパンツと黒のバッグで引き締める。",c:[C("白","#f4f3ef"),C("黒","#222222")]},
+ {g:"f1",id:"sEoZHipn7j4",ttl:"キャミソール×カーキのワイドパンツ",d:"黒のキャミソールに、カーキのゆったりしたパンツ。風が通って涼しい。",c:[C("黒","#222222"),C("カーキ","#6f6a44")]},
+ {g:"f1",id:"Oh2YiDoiczo",ttl:"柄のセットアップ",d:"ブラウン系の柄のトップスとゆったりパンツ。薄くて軽い生地で真夏も快適。",c:[C("ブラウン","#8a5a3c"),C("ベージュ","#d2b48c")]},
+ {g:"f2",id:"rEDBKUrmhZY",ttl:"水色T×白シャツの羽織り",d:"水色のTシャツに白シャツを羽織って、デニム。シャツは前を結んでも。",c:[C("水色","#7fb3e0"),C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
+ {g:"f2",id:"OXH2LQ7TqgM",t:"a",ttl:"キャメルのロングカーディガン",d:"白のトップスとパンツに、キャメルのロングカーディガンを羽織る。秋口の朝晩にちょうどいい。",c:[C("キャメル","#b07a46"),C("白","#f4f3ef")]},
+ {g:"f2",id:"t3Uh3scDsSw",ttl:"白ブラウス×カーディガン",d:"白のブラウスに薄いカーディガン、グレーのスカート。やわらかい色でまとめる。",c:[C("白","#f4f3ef"),C("ベージュ","#d8cbb5"),C("グレー","#8e9196")]},
+ {g:"f3",id:"r1nXtpJ4KQU",t:"a",ttl:"キャメルのジャケット×ワイドパンツ",d:"キャメルのジャケットに、ベージュのワイドパンツ。同じ系統の色でそろえたワントーン。",c:[C("キャメル","#b98552"),C("ベージュ","#d2b48c"),C("白","#f4f3ef")]},
+ {g:"f3",id:"zeKjoAjoMcg",t:"s",ttl:"白ニット×デニム",d:"白の透かし編みニットにデニム。軽い白で春らしく。",c:[C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
+ {g:"f3",id:"NyaTp-qBCoU",t:"s",ttl:"ピンクのカーディガン×チェックスカート",d:"ピンクベージュのカーディガンに、チェックのスカート。やさしい色の組み合わせ。",c:[C("ピンクベージュ","#e5c4b8"),C("赤","#b0473f"),C("白","#f4f3ef")]},
+ {g:"f3",id:"m8GG0BYVeHg",t:"a",ttl:"ライダース×ボルドーのパンツ",d:"黒のライダースジャケットに白シャツ、ボルドーのフレアパンツ。深い赤が秋らしい。",c:[C("黒","#222222"),C("ボルドー","#6d2234"),C("白","#f4f3ef")]},
+ {g:"f4",id:"c3HGzaB7-wo",t:"a",ttl:"ブラウンのチェックコート",d:"ブラウンのチェックのコートに、キャメルのキャップ。雨の日は透明の傘で明るく。",c:[C("ブラウン","#8a5530"),C("キャメル","#b98552")]},
+ {g:"f4",id:"F-nkzHozSz4",t:"s",ttl:"ピンクベージュのベルトコート",d:"ピンクベージュのベルト付きコートに白のタートル、黒のパンツと白スニーカー。",c:[C("ピンクベージュ","#e0c9c0"),C("白","#f4f3ef"),C("黒","#222222")]},
+ {g:"f4",id:"LA0bzRHvdI8",ttl:"ベージュのトレンチ×黒タートル",d:"定番のベージュのトレンチコートに、黒のタートルネックで首もとを暖かく。",c:[C("ベージュ","#c8b08c"),C("黒","#222222")]},
+ {g:"f5",id:"AUPsQblFMx8",ttl:"マスタードのコート×ニット帽",d:"マスタードのコートに黒のニット帽。冬の街で映える色を1つ入れる。",c:[C("マスタード","#c9a03a"),C("黒","#222222")]},
+ {g:"f5",id:"7LiRr9RWIoU",ttl:"アイボリーのコート×チェックのマフラー",d:"アイボリーのロングコートに、白黒チェックのマフラーとスニーカー。",c:[C("アイボリー","#ece6d6"),C("黒","#222222"),C("白","#f4f3ef")]},
+ {g:"f5",id:"DGLvPnFJ1XY",ttl:"深緑のダウン×チェックのパンツ",d:"深いグリーンのダウンにベージュのパーカー、チェックのパンツ。",c:[C("フォレストグリーン","#2f4a3a"),C("ベージュ","#d8c3a5"),C("ブラウン","#7a5b3c")]},
+ {g:"f5",id:"RxV3J-jYqh0",ttl:"黒のロングコート",d:"黒のロングコートを主役に、全身を暗めの色でまとめる。",c:[C("黒","#222222"),C("チャコール","#3d3f43")]},
+ {g:"k1",id:"b-VS5mvHtsQ",ttl:"ボーダーT×グリーンの半ズボン",d:"ボーダーのTシャツに、グリーンの半ズボン。汗をかいても乾きやすい綿で。",c:[C("白","#f4f3ef"),C("グレー","#9a9a96"),C("グリーン","#2f6b5f")]},
+ {g:"k1",id:"MSsS1WPukEw",ttl:"ドットの半袖シャツ×ベージュ",d:"ネイビーのドットの半袖シャツに、ベージュの半ズボンとサンダル。",c:[C("ネイビー","#23345a"),C("ベージュ","#c9b08a")]},
+ {g:"k1",id:"zhikqyvJrmY",ttl:"白T×ピンクのレギンス",d:"白のTシャツに、ピンクの七分丈レギンス。動きやすくて汚れても洗いやすい。",c:[C("白","#f4f3ef"),C("ピンク","#e2508f")]},
+ {g:"k2",id:"r8LmVbUKgns",ttl:"白シャツ×ベージュのパンツ",d:"白の長袖シャツに、ベージュの長ズボン。暑ければ袖をまくって。",c:[C("白","#f4f3ef"),C("ベージュ","#c9a77c")]},
+ {g:"k2",id:"BSUH-FSrGw4",ttl:"白T×グレーのレギンス",d:"白のTシャツに、グレーのレギンス。朝晩は薄いカーディガンを足して。",c:[C("白","#f4f3ef"),C("グレー","#a6a8ab")]},
+ {g:"k2",id:"SS9xo2JMNLM",ttl:"ボーダーT×半ズボン",d:"ボーダーのTシャツにグリーンの半ズボン、スニーカー。外遊びの日に。",c:[C("白","#f4f3ef"),C("グレー","#8d8f92"),C("グリーン","#1f5a50")]},
+ {g:"k3",id:"hM-LejH4LJw",t:"a",ttl:"マスタードのトレーナー×デニム",d:"マスタードのトレーナーにデニム。秋の公園に合う色。",c:[C("マスタード","#c98a2e"),C("インディゴ","#5a7590")]},
+ {g:"k3",id:"csKHA7NhGk0",t:"s",ttl:"ブルーのニット×ベージュのパンツ",d:"ブルーのニットに、ベージュのパンツ。えりつきのシャツを中に重ねてきちんと感も。",c:[C("ブルー","#4f6fa3"),C("ベージュ","#c4a27b")]},
+ {g:"k4",id:"F6PcXJ9s2UQ",t:"a",ttl:"柄のフリース×ニット帽",d:"カラフルな柄のフリースに、白のニット帽。フリースは軽くて動きやすい。",c:[C("オレンジ","#d9822b"),C("ネイビー","#23345a"),C("白","#f4f3ef")]},
+ {g:"k4",id:"ld8Thc2ryuQ",ttl:"ピンクのジャケット×ニット帽",d:"ピンクのジャケットにニット帽、デニム。小さい子は帽子で頭を暖かく。",c:[C("ピンク","#e8a7bf"),C("インディゴ","#3f5a86")]},
+ {g:"k4",id:"pP2yCpLwwbI",t:"a",ttl:"柄のパーカー×グレーのパンツ",d:"白地に柄のパーカーと、グレーのパンツ。落ち葉の季節に明るい色で。",c:[C("白","#f4f3ef"),C("グレー","#8d8f92")]},
+ {g:"k5",id:"gjlMT52gy5M",ttl:"スノーウェア×ボアの帽子",d:"ピンクのスノーウェアに、耳まで隠れるボアの帽子と手袋。雪遊びの日に。",c:[C("ピンク","#d63a6a"),C("ブラウン","#6b4f3a")]},
+ {g:"k5",id:"VYn5NIlLMlw",ttl:"赤のダウン×手袋",d:"赤のダウンジャケットに手袋。目立つ色は外遊びで見つけやすい。",c:[C("赤","#e0442b"),C("グレー","#6b6d70")]}
+];
+const SEASON = {
+  spring:{name:"春",tag:"s",note:"明るく軽い色が春らしい。白やパステルを多めに。",c:[C("アイボリー","#efe9dc"),C("ライトブルー","#a9c6e0"),C("ピンクベージュ","#e5c4b8"),C("ミント","#b9d8c2"),C("ライトグレー","#c9ccd0")]},
+  summer:{name:"夏",tag:"",note:"白やサックスなど、涼しげな色を広い面積に。",c:[C("白","#f7f7f5"),C("サックス","#8fb3d9"),C("ネイビー","#23345a"),C("ベージュ","#d9c7a7"),C("カーキ","#8a8a5c")]},
+  autumn:{name:"秋",tag:"a",note:"キャメルやブラウンなど深みのある色が秋らしい。小物でボルドーやマスタードを足して。",c:[C("キャメル","#b98552"),C("ブラウン","#6b4630"),C("ボルドー","#6d2234"),C("カーキ","#6f6a44"),C("マスタード","#c9a03a")]},
+  winter:{name:"冬",tag:"",note:"ネイビーやチャコールを土台に、白やアイボリーで明るさを。",c:[C("ネイビー","#1f2a44"),C("チャコール","#3d3f43"),C("アイボリー","#ece6d6"),C("ボルドー","#5e1f2c"),C("フォレストグリーン","#2f4a3a")]}
+};
+function seasonOf(dateStr){ const m = +dateStr.slice(5,7); return m>=3&&m<=5 ? "spring" : m>=6&&m<=8 ? "summer" : m>=9&&m<=11 ? "autumn" : "winter"; }
+function levelOf(dayT, outT){
+  if(dayT>=26) return 1;
+  const o = band(outT,[21,17,13,9,4]);
+  if(dayT>=22 && o<=1) return 2;
+  if(o<=2) return 3;
+  if(o===3) return 4;
+  return 5;
+}
+let coordIdx = 0;
+// 季節に合う色のコーデを先に出す（逆の季節の色は最後）
+function coordList(p){
+  const tag = SEASON[p.season].tag;
+  const score = x => !x.t ? 1 : x.t===tag ? 0 : (tag ? 2 : 1);
+  return COORDS.filter(x => x.g===who+p.level).map((x,i)=>[x,i])
+    .sort((a,b) => score(a[0])-score(b[0]) || a[1]-b[1]).map(a => a[0]);
+}
+const chips = cs => `<ul class="chips">${cs.map(([n,h]) => `<li><i style="background:${h}"></i>${n}</li>`).join("")}</ul>`;
+function coordInner(p){
+  const list = coordList(p); if(!list.length) return "";
+  const n = coordIdx % list.length, x = list[n], s = SEASON[p.season];
+  return `<h3>おすすめコーデ<span>${WHO[who].label}・${s.name}</span></h3>
+      <div class="coord">
+        <figure>
+          <img src="img/${x.g}-${x.id}.jpg" alt="${esc(x.ttl)}のコーディネート" width="600" height="800">
+          <figcaption>写真：<a href="https://unsplash.com/photos/${x.id}" target="_blank" rel="noopener">Unsplash</a></figcaption>
+        </figure>
+        <div class="body">
+          <div class="num">コーデ ${n+1} ／ ${list.length}</div>
+          <p class="ttl">${esc(x.ttl)}</p>
+          <p class="desc">${esc(x.d)}</p>
+          ${chips(x.c)}
+          <div class="season"><p>${s.name}の色：${s.note}</p>${chips(s.c)}</div>
+          ${list.length>1 ? `<button class="change" type="button" id="change">チェンジ</button>` : ""}
+        </div>
+      </div>`;
+}
+function showCoord(p, focus){
+  const sec = $("coordSec"); if(!sec) return;
+  sec.innerHTML = coordInner(p);
+  const b = $("change");
+  if(b){ b.addEventListener("click", () => { coordIdx++; showCoord(p, true); }); if(focus) b.focus(); }
 }
 
 // ---- 服装を決める ----
@@ -372,7 +493,8 @@ function plan(i, who){
   if(kid) notes.push(["", dayFeel>=20 ? "よく動くので大人より1枚少なめにしています。汗をかいたら着替えを。" : "よく動くので大人より1枚少なめにしています。脱ぎ着しやすい前開きの上着が便利。"]);
   else if(who==="f" && outT<13) notes.push(["", "足首やひざが冷えやすい日。スカートならタイツを合わせて。"]);
 
-  return {hi, lo, dayFeel, mornFeel, eveFeel, rainP, wind, uv, code, items, notes, head:headline(dayT, outT)};
+  return {hi, lo, dayFeel, mornFeel, eveFeel, rainP, wind, uv, code, items, notes, head:headline(dayT, outT),
+    level:levelOf(dayT, outT), season:seasonOf(data.daily.time[i])};
 }
 function rainTime(i){
   const H = data.hourly, s = i*24; const hrs = [];
@@ -414,6 +536,8 @@ function render(){
       </ul>
     </section>
 
+    <section id="coordSec"></section>
+
     <section>
       <h3>気をつけること</h3>
       <ul class="notes">${p.notes.map(([c,t]) => `<li class="${c==="w"?"w":c==="r"?"r":""}">${t}</li>`).join("")}</ul>
@@ -427,6 +551,7 @@ function render(){
       </div>
     </section>
   </div>`;
+  showCoord(p);
 }
 
 function chart(i){
