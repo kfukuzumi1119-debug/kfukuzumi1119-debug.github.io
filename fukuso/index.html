@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>きょうの服装予報｜天気と気温から今日の服装がわかる</title>
-<meta name="description" content="今日・明日の天気、最高・最低気温、体感温度、降水確率から、その日に着ていく服装を自動で提案する無料のWebページ。上着がいるか、傘がいるか、朝晩の寒暖差まで一目でわかります。現在地や全国の市区町村に対応。">
+<meta name="description" content="今日・明日の天気、最高・最低気温、体感温度、降水確率から、その日に着ていく服装を自動で提案する無料のWebページ。上着がいるか、傘がいるか、朝晩の寒暖差まで一目でわかります。札幌から那覇まで全国の主要都市に対応。">
 <link rel="canonical" href="https://kfukuzumi1119-debug.github.io/fukuso/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="きょうの服装予報">
@@ -156,13 +156,7 @@ footer a{color:var(--accent)}
   <div class="place">
     <label for="city" class="eyebrow">場所</label>
     <select id="city"></select>
-    <button class="btn" id="geo" type="button">現在地</button>
-    <form id="searchForm" style="display:flex;gap:8px;flex:1 1 220px;min-width:0">
-      <input id="q" type="search" placeholder="市区町村で探す（例：藤沢）" aria-label="市区町村で探す">
-      <button class="btn" type="submit">探す</button>
-    </form>
   </div>
-  <div class="results" id="results"></div>
 
   <div class="who">
     <span class="eyebrow">だれの服？</span>
@@ -201,10 +195,10 @@ footer a{color:var(--accent)}
 
 <script>
 const PRESETS = [
-  ["厚木",35.4433,139.3625],["海老名",35.4466,139.3909],["相模原",35.5714,139.3733],
-  ["横浜",35.4437,139.6380],["川崎",35.5308,139.7030],["藤沢",35.3391,139.4900],
-  ["東京",35.6895,139.6917],["那覇",26.2124,127.6809],["大阪",34.6937,135.5023],
-  ["名古屋",35.1815,136.9066],["札幌",43.0618,141.3545],["福岡",33.5904,130.4017]
+  ["札幌",43.0618,141.3545],["仙台",38.2682,140.8694],["新潟",37.9161,139.0364],["東京",35.6895,139.6917],
+  ["横浜",35.4437,139.6380],["名古屋",35.1815,136.9066],["金沢",36.5613,136.6562],["京都",35.0116,135.7681],
+  ["大阪",34.6937,135.5023],["神戸",34.6901,135.1955],["広島",34.3853,132.4553],["高松",34.3428,134.0466],
+  ["福岡",33.5904,130.4017],["鹿児島",31.5966,130.5571],["那覇",26.2124,127.6809]
 ];
 const WX = {0:"快晴",1:"晴れ",2:"晴れ時々くもり",3:"くもり",45:"霧",48:"霧",51:"霧雨",53:"霧雨",55:"霧雨",
   56:"冷たい霧雨",57:"冷たい霧雨",61:"小雨",63:"雨",65:"強い雨",66:"冷たい雨",67:"冷たい雨",71:"小雪",73:"雪",75:"大雪",
@@ -212,7 +206,8 @@ const WX = {0:"快晴",1:"晴れ",2:"晴れ時々くもり",3:"くもり",45:"�
 const DAYNAME = ["今日","明日","あさって"];
 const WEEK = "日月火水木金土";
 
-let place = load() || {name:"厚木",lat:35.4433,lon:139.3625};
+let place = load();
+if(!place || !PRESETS.some(p => p[0]===place.name)) place = {name:"東京",lat:35.6895,lon:139.6917};
 let data = null, dayIdx = 0;
 let who = (() => { try{ return localStorage.getItem("fukuso-who"); }catch(e){ return null; } })();
 if(!["m","f","k"].includes(who)) who = "m";
@@ -226,44 +221,14 @@ const r0 = n => Math.round(n);
 // 場所の選択肢
 function fillSelect(){
   const sel = $("city");
-  const opts = PRESETS.map(p => `<option value="${p[1]},${p[2]}">${p[0]}</option>`);
-  const cur = `${place.lat},${place.lon}`;
-  if(!PRESETS.some(p => `${p[1]},${p[2]}` === cur)) opts.unshift(`<option value="${cur}">${esc(place.name)}</option>`);
-  sel.innerHTML = opts.join("");
-  sel.value = cur;
+  sel.innerHTML = PRESETS.map(p => `<option value="${p[1]},${p[2]}">${p[0]}</option>`).join("");
+  sel.value = `${place.lat},${place.lon}`;
 }
 $("city").addEventListener("change", e => {
   const [lat,lon] = e.target.value.split(",").map(Number);
   place = {name:e.target.selectedOptions[0].textContent, lat, lon};
   save(); fetchWeather();
 });
-$("geo").addEventListener("click", () => {
-  if(!navigator.geolocation){ showStatus("このブラウザでは現在地が使えません。場所を選ぶか、市区町村で探してください。", true); return; }
-  showStatus("現在地を調べています…");
-  navigator.geolocation.getCurrentPosition(pos => {
-    place = {name:"現在地", lat:+pos.coords.latitude.toFixed(4), lon:+pos.coords.longitude.toFixed(4)};
-    save(); fillSelect(); fetchWeather();
-  }, () => showStatus("現在地を取得できませんでした。ブラウザの位置情報を許可するか、場所を選んでください。", true), {timeout:10000});
-});
-$("searchForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  const q = $("q").value.trim(); if(!q) return;
-  $("results").innerHTML = `<span class="eyebrow">探しています…</span>`;
-  try{
-    const u = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&language=ja&countryCode=JP`;
-    const j = await (await fetch(u)).json();
-    const list = j.results || [];
-    if(!list.length){ $("results").innerHTML = `<span class="eyebrow">「${esc(q)}」は見つかりませんでした。「市」「町」を付けたり、ひらがなで試してください。</span>`; return; }
-    $("results").innerHTML = list.map((r,i) =>
-      `<button class="btn" type="button" data-i="${i}">${esc(r.name)}<span style="color:var(--muted)">（${esc(r.admin1||"")}）</span></button>`).join("");
-    $("results").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
-      const r = list[+b.dataset.i];
-      place = {name:r.name, lat:+r.latitude.toFixed(4), lon:+r.longitude.toFixed(4)};
-      save(); fillSelect(); $("results").innerHTML = ""; $("q").value = ""; fetchWeather();
-    }));
-  }catch(err){ $("results").innerHTML = `<span class="eyebrow">検索できませんでした。通信状態を確かめてください。</span>`; }
-});
-
 // だれの服
 function fillWho(){
   const el = $("who");
