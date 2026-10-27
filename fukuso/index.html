@@ -51,7 +51,7 @@
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7}
-.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:18px}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:18px}
 header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;border-bottom:2px solid var(--ink);padding-bottom:10px}
 h1{margin:0;font-size:22px;font-weight:700;letter-spacing:.04em}
 .date{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
@@ -130,6 +130,9 @@ section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing
 .tbl th{font-weight:700;font-size:13px;color:var(--muted)}
 .tbl tr:last-child td{border-bottom:0}
 .tbl td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:700}
+.cols,.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:980px){.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+.guide p,footer{max-width:72ch}
 footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 footer a{color:var(--accent)}
 @media (max-width:600px){
@@ -637,7 +640,7 @@ function render(){
   const d = new Date(data.daily.time[dayIdx]+"T00:00");
   $("date").textContent = `${place.name}　${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WEEK[d.getDay()]}）`;
   $("main").innerHTML = `
-  <div style="display:flex;flex-direction:column;gap:18px">
+  <div class="cols"><div class="col">
     <div class="board">
       <div class="verdict">
         <div class="eyebrow">${DAYNAME[dayIdx]}の服装（${WHO[who].label}）</div>
@@ -663,12 +666,12 @@ function render(){
       </ul>
     </section>
 
-    <section id="coordSec"></section>
-
     <section>
       <h3>気をつけること</h3>
-      <ul class="notes">${p.notes.map(([c,t]) => `<li class="${c==="w"?"w":c==="r"?"r":""}">${t}</li>`).join("")}</ul>
+      <ul class="notes">${p.notes.length ? p.notes.map(([c,t]) => `<li class="${c==="w"?"w":c==="r"?"r":""}">${t}</li>`).join("") : `<li>特に気をつけることはありません。</li>`}</ul>
     </section>
+  </div><div class="col">
+    <section id="coordSec"></section>
 
     <section>
       <h3>時間ごとの気温と雨<span>6時〜24時</span></h3>
@@ -677,7 +680,7 @@ function render(){
         ${chart(dayIdx)}
       </div>
     </section>
-  </div>`;
+  </div></div>`;
   showCoord(p);
 }
 
