@@ -91,9 +91,10 @@ button,select,input{font:inherit;color:inherit}
 section h3{margin:0 0 8px;font-size:15px;letter-spacing:.06em;display:flex;align-items:baseline;gap:10px}
 section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0}
 .outfit{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--line)}
-.outfit li{display:grid;grid-template-columns:5.5em minmax(0,1fr);gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.outfit li{display:grid;grid-template-columns:7em minmax(0,1fr);gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)}
 .outfit li:last-child{border-bottom:0}
-.outfit .k{color:var(--muted);font-size:13px;padding-top:2px}
+.outfit .k{color:var(--muted);font-size:13px;padding-top:2px;display:flex;gap:6px;align-items:flex-start}
+.outfit .k svg{width:20px;height:20px;flex:none;color:var(--accent);margin-top:-1px}
 .outfit .v{font-weight:500}
 .outfit .why{display:block;font-weight:400;font-size:13px;color:var(--muted)}
 .notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
@@ -106,9 +107,8 @@ section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing
 .legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
 .coord{background:var(--paper);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr)}
 .coord figure{margin:0;border-right:1px solid var(--line);display:flex;flex-direction:column}
-.coord img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;max-width:100%;background:var(--bg)}
-.coord figcaption{font-size:11px;color:var(--muted);padding:4px 8px}
-.coord figcaption a{color:var(--muted)}
+.coord .ill{background:#f3ebe0;display:flex;align-items:center;justify-content:center;padding:12px 8px}
+.coord .ill svg{display:block;width:100%;max-width:210px;height:auto}
 .coord .body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .coord .num{font-size:12px;color:var(--muted);letter-spacing:.08em;font-variant-numeric:tabular-nums}
 .coord .ttl{margin:0;font-size:17px;font-weight:700;line-height:1.5}
@@ -139,9 +139,9 @@ footer a{color:var(--accent)}
   .coord{grid-template-columns:minmax(0,150px) minmax(0,1fr)}
   .coord .body{padding:12px;gap:10px}
   .coord .ttl{font-size:15px}
-  .outfit li{grid-template-columns:4.5em minmax(0,1fr);padding:10px 12px}
+  .outfit li{grid-template-columns:6.2em minmax(0,1fr);padding:10px 12px}
 }
-@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}.coord img{animation:fade .3s ease-out}}
+@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}.coord .ill svg{animation:fade .3s ease-out}}
 @keyframes fade{from{opacity:.4}to{opacity:1}}
 @keyframes in{from{transform:translateY(4px)}to{transform:none}}
 </style>
@@ -268,62 +268,227 @@ async function fetchWeather(){
   }
 }
 
-// ---- おすすめコーデ（写真は Unsplash。img/ に保存） ----
-// g：人＋段階（1=夏 2=半袖＋羽織り 3=長袖＋薄い上着 4=コート 5=ダウン）。t：s=春らしい色 a=秋らしい色
+// ---- おすすめコーデ（イラストは下の draw() で服の部品を組み合わせて描く） ----
 const C = (n,h) => [n,h];
-const COORDS = [
- {g:"m1",id:"zZxQm6td7CY",ttl:"ストライプシャツ×白ショーツ",d:"細いストライプの長袖シャツを腕まくりして、白のショートパンツ。黒のスニーカーで引き締める。",c:[C("サックス","#9fb7d6"),C("白","#f4f3ef"),C("黒","#222222")]},
- {g:"m1",id:"cp4ucXlnhYw",ttl:"柄シャツ×白パンツ",d:"小さな柄の半袖シャツに、白のパンツと白スニーカー。ベージュのベルトでほどよく締める。",c:[C("白","#f4f3ef"),C("ベージュ","#c9b08a"),C("グレー","#9a9a96")]},
- {g:"m1",id:"tYUlr7Lknf8",ttl:"レトロ柄シャツ×チノパン",d:"ベージュ系の柄の半袖シャツに、同じ系統の色のチノパン。色をそろえると大人っぽい。",c:[C("ベージュ","#cdb48a"),C("ブラウン","#7a5b3c"),C("黒","#222222")]},
- {g:"m2",id:"SsRQHmTm4QI",t:"a",ttl:"ブラウンの半袖シャツ×白T",d:"白Tの上に、ブラウンの半袖シャツを前を開けて羽織る。暑くなったら脱いで白T1枚に。",c:[C("ブラウン","#8a4f22"),C("白","#f4f3ef")]},
- {g:"m2",id:"XMiyOo5oEnU",ttl:"黒のシャツジャケット×黒T",d:"黒の半袖シャツジャケットを黒Tに重ねたワントーン。ゆったりした形で涼しく見える。",c:[C("黒","#222222"),C("チャコール","#3d3f43")]},
- {g:"m2",id:"bXsENzFhuOM",ttl:"白T×シャツの羽織り",d:"白Tに薄いベージュのシャツを羽織って、黒のパンツ。朝晩はシャツの前を閉じて調整。",c:[C("白","#f4f3ef"),C("ベージュ","#d8cbb5"),C("黒","#222222")]},
- {g:"m3",id:"nzm5waLKnYs",t:"a",ttl:"キャメルのケーブルニット",d:"キャメルのケーブル編みニットに黒のマフラー。秋らしい色を1枚で主役に。",c:[C("キャメル","#b98552"),C("黒","#222222")]},
- {g:"m3",id:"d54wbtjedog",t:"a",ttl:"スエードジャケット×デニム",d:"ブラウンのスエードジャケットに黒シャツとデニム。靴もブラウンでそろえる。",c:[C("ブラウン","#8a5530"),C("黒","#222222"),C("インディゴ","#3f5a86")]},
- {g:"m3",id:"UNSj7BtOK0Q",t:"s",ttl:"デニムジャケット×柄シャツ",d:"色落ちしたデニムジャケットに柄シャツ。軽い色で春らしく。",c:[C("ライトブルー","#9fbad6"),C("白","#f4f3ef")]},
- {g:"m3",id:"9_iWyBNNveY",t:"s",ttl:"水色カーディガン×白シャツ",d:"白シャツに水色のカーディガンを重ねて、デニムで軽やかに。",c:[C("水色","#a9c6e0"),C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
- {g:"m4",id:"-au3XMzfhro",t:"a",ttl:"キャメルコート×タートルネック",d:"キャメルのチェスターコートに、ブラウンのタートルネック。同じ系統の色で重ねると上品。",c:[C("キャメル","#c19a73"),C("ブラウン","#7a5236"),C("こげ茶","#3b2a20")]},
- {g:"m4",id:"rlqU2nuEbJQ",ttl:"アイボリーのロングコート",d:"明るいアイボリーのダブルのロングコート。中を黒でまとめるとコートが引き立つ。",c:[C("アイボリー","#e8dfd0"),C("黒","#222222")]},
- {g:"m4",id:"HOTWXfbII6k",ttl:"グレーのジャケット×マフラー",d:"グレーのジャケットとパンツに、ブラウンのマフラー。寒い朝はマフラーで調整。",c:[C("グレー","#6b6d70"),C("ブラウン","#6b4f3a"),C("チャコール","#3d3f43")]},
- {g:"m5",id:"bX2NLMut42M",ttl:"黒のダウン×グレーのパーカー",d:"黒のダウンの下にグレーのパーカー。黒のパンツに白スニーカーで足もとを明るく。",c:[C("黒","#222222"),C("グレー","#8d8f92"),C("白","#f4f3ef")]},
- {g:"m5",id:"Dq8CslLQbRc",ttl:"ネイビーの中わたジャケット",d:"ネイビーの中わたジャケットにデニム。紺と青の濃淡で落ち着いた印象。",c:[C("ネイビー","#24365a"),C("インディゴ","#3f5a86")]},
- {g:"f1",id:"zEQ_uxOYCJk",ttl:"白シャツ×黒ショートパンツ",d:"白のシャツをさらっと着て、黒のショートパンツと黒のバッグで引き締める。",c:[C("白","#f4f3ef"),C("黒","#222222")]},
- {g:"f1",id:"sEoZHipn7j4",ttl:"キャミソール×カーキのワイドパンツ",d:"黒のキャミソールに、カーキのゆったりしたパンツ。風が通って涼しい。",c:[C("黒","#222222"),C("カーキ","#6f6a44")]},
- {g:"f1",id:"Oh2YiDoiczo",ttl:"柄のセットアップ",d:"ブラウン系の柄のトップスとゆったりパンツ。薄くて軽い生地で真夏も快適。",c:[C("ブラウン","#8a5a3c"),C("ベージュ","#d2b48c")]},
- {g:"f2",id:"rEDBKUrmhZY",ttl:"水色T×白シャツの羽織り",d:"水色のTシャツに白シャツを羽織って、デニム。シャツは前を結んでも。",c:[C("水色","#7fb3e0"),C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
- {g:"f2",id:"OXH2LQ7TqgM",t:"a",ttl:"キャメルのロングカーディガン",d:"白のトップスとパンツに、キャメルのロングカーディガンを羽織る。秋口の朝晩にちょうどいい。",c:[C("キャメル","#b07a46"),C("白","#f4f3ef")]},
- {g:"f2",id:"t3Uh3scDsSw",ttl:"白ブラウス×カーディガン",d:"白のブラウスに薄いカーディガン、グレーのスカート。やわらかい色でまとめる。",c:[C("白","#f4f3ef"),C("ベージュ","#d8cbb5"),C("グレー","#8e9196")]},
- {g:"f3",id:"r1nXtpJ4KQU",t:"a",ttl:"キャメルのジャケット×ワイドパンツ",d:"キャメルのジャケットに、ベージュのワイドパンツ。同じ系統の色でそろえたワントーン。",c:[C("キャメル","#b98552"),C("ベージュ","#d2b48c"),C("白","#f4f3ef")]},
- {g:"f3",id:"zeKjoAjoMcg",t:"s",ttl:"白ニット×デニム",d:"白の透かし編みニットにデニム。軽い白で春らしく。",c:[C("白","#f4f3ef"),C("インディゴ","#3f5a86")]},
- {g:"f3",id:"NyaTp-qBCoU",t:"s",ttl:"ピンクのカーディガン×チェックスカート",d:"ピンクベージュのカーディガンに、チェックのスカート。やさしい色の組み合わせ。",c:[C("ピンクベージュ","#e5c4b8"),C("赤","#b0473f"),C("白","#f4f3ef")]},
- {g:"f3",id:"m8GG0BYVeHg",t:"a",ttl:"ライダース×ボルドーのパンツ",d:"黒のライダースジャケットに白シャツ、ボルドーのフレアパンツ。深い赤が秋らしい。",c:[C("黒","#222222"),C("ボルドー","#6d2234"),C("白","#f4f3ef")]},
- {g:"f4",id:"c3HGzaB7-wo",t:"a",ttl:"ブラウンのチェックコート",d:"ブラウンのチェックのコートに、キャメルのキャップ。雨の日は透明の傘で明るく。",c:[C("ブラウン","#8a5530"),C("キャメル","#b98552")]},
- {g:"f4",id:"F-nkzHozSz4",t:"s",ttl:"ピンクベージュのベルトコート",d:"ピンクベージュのベルト付きコートに白のタートル、黒のパンツと白スニーカー。",c:[C("ピンクベージュ","#e0c9c0"),C("白","#f4f3ef"),C("黒","#222222")]},
- {g:"f4",id:"LA0bzRHvdI8",ttl:"ベージュのトレンチ×黒タートル",d:"定番のベージュのトレンチコートに、黒のタートルネックで首もとを暖かく。",c:[C("ベージュ","#c8b08c"),C("黒","#222222")]},
- {g:"f5",id:"AUPsQblFMx8",ttl:"マスタードのコート×ニット帽",d:"マスタードのコートに黒のニット帽。冬の街で映える色を1つ入れる。",c:[C("マスタード","#c9a03a"),C("黒","#222222")]},
- {g:"f5",id:"7LiRr9RWIoU",ttl:"アイボリーのコート×チェックのマフラー",d:"アイボリーのロングコートに、白黒チェックのマフラーとスニーカー。",c:[C("アイボリー","#ece6d6"),C("黒","#222222"),C("白","#f4f3ef")]},
- {g:"f5",id:"DGLvPnFJ1XY",ttl:"深緑のダウン×チェックのパンツ",d:"深いグリーンのダウンにベージュのパーカー、チェックのパンツ。",c:[C("フォレストグリーン","#2f4a3a"),C("ベージュ","#d8c3a5"),C("ブラウン","#7a5b3c")]},
- {g:"f5",id:"RxV3J-jYqh0",ttl:"黒のロングコート",d:"黒のロングコートを主役に、全身を暗めの色でまとめる。",c:[C("黒","#222222"),C("チャコール","#3d3f43")]},
- {g:"k1",id:"b-VS5mvHtsQ",ttl:"ボーダーT×グリーンの半ズボン",d:"ボーダーのTシャツに、グリーンの半ズボン。汗をかいても乾きやすい綿で。",c:[C("白","#f4f3ef"),C("グレー","#9a9a96"),C("グリーン","#2f6b5f")]},
- {g:"k1",id:"MSsS1WPukEw",ttl:"ドットの半袖シャツ×ベージュ",d:"ネイビーのドットの半袖シャツに、ベージュの半ズボンとサンダル。",c:[C("ネイビー","#23345a"),C("ベージュ","#c9b08a")]},
- {g:"k1",id:"zhikqyvJrmY",ttl:"白T×ピンクのレギンス",d:"白のTシャツに、ピンクの七分丈レギンス。動きやすくて汚れても洗いやすい。",c:[C("白","#f4f3ef"),C("ピンク","#e2508f")]},
- {g:"k2",id:"r8LmVbUKgns",ttl:"白シャツ×ベージュのパンツ",d:"白の長袖シャツに、ベージュの長ズボン。暑ければ袖をまくって。",c:[C("白","#f4f3ef"),C("ベージュ","#c9a77c")]},
- {g:"k2",id:"BSUH-FSrGw4",ttl:"白T×グレーのレギンス",d:"白のTシャツに、グレーのレギンス。朝晩は薄いカーディガンを足して。",c:[C("白","#f4f3ef"),C("グレー","#a6a8ab")]},
- {g:"k2",id:"SS9xo2JMNLM",ttl:"ボーダーT×半ズボン",d:"ボーダーのTシャツにグリーンの半ズボン、スニーカー。外遊びの日に。",c:[C("白","#f4f3ef"),C("グレー","#8d8f92"),C("グリーン","#1f5a50")]},
- {g:"k3",id:"hM-LejH4LJw",t:"a",ttl:"マスタードのトレーナー×デニム",d:"マスタードのトレーナーにデニム。秋の公園に合う色。",c:[C("マスタード","#c98a2e"),C("インディゴ","#5a7590")]},
- {g:"k3",id:"csKHA7NhGk0",t:"s",ttl:"ブルーのニット×ベージュのパンツ",d:"ブルーのニットに、ベージュのパンツ。えりつきのシャツを中に重ねてきちんと感も。",c:[C("ブルー","#4f6fa3"),C("ベージュ","#c4a27b")]},
- {g:"k4",id:"F6PcXJ9s2UQ",t:"a",ttl:"柄のフリース×ニット帽",d:"カラフルな柄のフリースに、白のニット帽。フリースは軽くて動きやすい。",c:[C("オレンジ","#d9822b"),C("ネイビー","#23345a"),C("白","#f4f3ef")]},
- {g:"k4",id:"ld8Thc2ryuQ",ttl:"ピンクのジャケット×ニット帽",d:"ピンクのジャケットにニット帽、デニム。小さい子は帽子で頭を暖かく。",c:[C("ピンク","#e8a7bf"),C("インディゴ","#3f5a86")]},
- {g:"k4",id:"pP2yCpLwwbI",t:"a",ttl:"柄のパーカー×グレーのパンツ",d:"白地に柄のパーカーと、グレーのパンツ。落ち葉の季節に明るい色で。",c:[C("白","#f4f3ef"),C("グレー","#8d8f92")]},
- {g:"k5",id:"gjlMT52gy5M",ttl:"スノーウェア×ボアの帽子",d:"ピンクのスノーウェアに、耳まで隠れるボアの帽子と手袋。雪遊びの日に。",c:[C("ピンク","#d63a6a"),C("ブラウン","#6b4f3a")]},
- {g:"k5",id:"VYn5NIlLMlw",ttl:"赤のダウン×手袋",d:"赤のダウンジャケットに手袋。目立つ色は外遊びで見つけやすい。",c:[C("赤","#e0442b"),C("グレー","#6b6d70")]}
-];
 const SEASON = {
-  spring:{name:"春",tag:"s",note:"明るく軽い色が春らしい。白やパステルを多めに。",c:[C("アイボリー","#efe9dc"),C("ライトブルー","#a9c6e0"),C("ピンクベージュ","#e5c4b8"),C("ミント","#b9d8c2"),C("ライトグレー","#c9ccd0")]},
-  summer:{name:"夏",tag:"",note:"白やサックスなど、涼しげな色を広い面積に。",c:[C("白","#f7f7f5"),C("サックス","#8fb3d9"),C("ネイビー","#23345a"),C("ベージュ","#d9c7a7"),C("カーキ","#8a8a5c")]},
-  autumn:{name:"秋",tag:"a",note:"キャメルやブラウンなど深みのある色が秋らしい。小物でボルドーやマスタードを足して。",c:[C("キャメル","#b98552"),C("ブラウン","#6b4630"),C("ボルドー","#6d2234"),C("カーキ","#6f6a44"),C("マスタード","#c9a03a")]},
-  winter:{name:"冬",tag:"",note:"ネイビーやチャコールを土台に、白やアイボリーで明るさを。",c:[C("ネイビー","#1f2a44"),C("チャコール","#3d3f43"),C("アイボリー","#ece6d6"),C("ボルドー","#5e1f2c"),C("フォレストグリーン","#2f4a3a")]}
+  spring:{name:"春",note:"明るく軽い色が春らしい。白やパステルを多めに。",c:[C("アイボリー","#efe9dc"),C("ライトブルー","#a9c6e0"),C("ピンクベージュ","#e5c4b8"),C("ミント","#b9d8c2"),C("ライトグレー","#c9ccd0")],
+    p:[{t:C("白","#f6f5f1"),o:C("ライトブルー","#a9c6e0"),b:C("ベージュ","#d9c4a0"),s:C("白","#f6f5f1"),a:C("ピンクベージュ","#e5c4b8")},
+       {t:C("ピンクベージュ","#e8c9bd"),o:C("アイボリー","#efe9dc"),b:C("ライトデニム","#93abc9"),s:C("白","#f6f5f1"),a:C("ミント","#b9d8c2")},
+       {t:C("サックス","#9fbfe0"),o:C("ベージュ","#d9c4a0"),b:C("白","#f6f5f1"),s:C("ブラウン","#7a5236"),a:C("ネイビー","#2a3b5f")},
+       {t:C("ミント","#b9d8c2"),o:C("ライトグレー","#c9ccd0"),b:C("ネイビー","#2a3b5f"),s:C("白","#f6f5f1"),a:C("レモン","#f0d66b")},
+       {t:C("白","#f6f5f1"),o:C("ネイビー","#2a3b5f"),b:C("ライトデニム","#93abc9"),s:C("白","#f6f5f1"),a:C("ベージュ","#d9c4a0")}]},
+  summer:{name:"夏",note:"白やサックスなど、涼しげな色を広い面積に。",c:[C("白","#f7f7f5"),C("サックス","#8fb3d9"),C("ネイビー","#23345a"),C("ベージュ","#d9c7a7"),C("カーキ","#8a8a5c")],
+    p:[{t:C("白","#f6f5f1"),o:C("サックス","#8fb3d9"),b:C("ネイビー","#2a3b5f"),s:C("白","#f6f5f1"),a:C("ベージュ","#d9c7a7")},
+       {t:C("サックス","#8fb3d9"),o:C("白","#f6f5f1"),b:C("ベージュ","#d9c7a7"),s:C("ブラウン","#7a5236"),a:C("ネイビー","#2a3b5f")},
+       {t:C("ネイビー","#2a3b5f"),o:C("ベージュ","#d9c7a7"),b:C("白","#f6f5f1"),s:C("白","#f6f5f1"),a:C("カーキ","#8a8a5c")},
+       {t:C("レモン","#f0d66b"),o:C("白","#f6f5f1"),b:C("デニム","#4a6489"),s:C("白","#f6f5f1"),a:C("白","#f6f5f1")},
+       {t:C("カーキ","#8a8a5c"),o:C("黒","#2b2b2b"),b:C("ベージュ","#d9c7a7"),s:C("黒","#2b2b2b"),a:C("黒","#2b2b2b")}]},
+  autumn:{name:"秋",note:"キャメルやブラウンなど深みのある色が秋らしい。小物でボルドーやマスタードを足して。",c:[C("キャメル","#b98552"),C("ブラウン","#6b4630"),C("ボルドー","#6d2234"),C("カーキ","#6f6a44"),C("マスタード","#c9a03a")],
+    p:[{t:C("白","#f6f5f1"),o:C("キャメル","#b98552"),b:C("ネイビー","#2a3b5f"),s:C("白","#f6f5f1"),a:C("ボルドー","#6d2234")},
+       {t:C("アイボリー","#efe6d4"),o:C("ブラウン","#6b4630"),b:C("デニム","#4a6489"),s:C("ブラウン","#6b4630"),a:C("マスタード","#c9a03a")},
+       {t:C("黒","#2b2b2b"),o:C("カーキ","#6f6a44"),b:C("ベージュ","#d2bb94"),s:C("黒","#2b2b2b"),a:C("キャメル","#b98552")},
+       {t:C("ボルドー","#7a2a3c"),o:C("チャコール","#3d3f43"),b:C("グレー","#9a9ca0"),s:C("黒","#2b2b2b"),a:C("グレー","#9a9ca0")},
+       {t:C("マスタード","#c9a03a"),o:C("ネイビー","#2a3b5f"),b:C("ベージュ","#d2bb94"),s:C("白","#f6f5f1"),a:C("ブラウン","#6b4630")}]},
+  winter:{name:"冬",note:"ネイビーやチャコールを土台に、白やアイボリーで明るさを。",c:[C("ネイビー","#1f2a44"),C("チャコール","#3d3f43"),C("アイボリー","#ece6d6"),C("ボルドー","#5e1f2c"),C("フォレストグリーン","#2f4a3a")],
+    p:[{t:C("白","#f6f5f1"),o:C("ネイビー","#24324f"),b:C("グレー","#9a9ca0"),s:C("黒","#2b2b2b"),a:C("ボルドー","#6d2234")},
+       {t:C("アイボリー","#ece6d6"),o:C("黒","#2b2b2b"),b:C("デニム","#4a6489"),s:C("白","#f6f5f1"),a:C("グレー","#9a9ca0")},
+       {t:C("グレー","#9a9ca0"),o:C("キャメル","#b98552"),b:C("黒","#2b2b2b"),s:C("ブラウン","#6b4630"),a:C("アイボリー","#ece6d6")},
+       {t:C("ボルドー","#6d2234"),o:C("チャコール","#3d3f43"),b:C("ネイビー","#24324f"),s:C("黒","#2b2b2b"),a:C("フォレストグリーン","#2f4a3a")},
+       {t:C("黒","#2b2b2b"),o:C("アイボリー","#ece6d6"),b:C("ベージュ","#d2bb94"),s:C("白","#f6f5f1"),a:C("ネイビー","#24324f")}]}
 };
+// 子どもは明るい色を2つ足す
+const KID_EXTRA = [
+  {t:C("黄色","#f2c94c"),o:C("赤","#d9483b"),b:C("デニム","#4a6489"),s:C("白","#f6f5f1"),a:C("赤","#d9483b")},
+  {t:C("白","#f6f5f1"),o:C("グリーン","#3f8f6b"),b:C("ネイビー","#2a3b5f"),s:C("黄色","#f2c94c"),a:C("オレンジ","#e58a3a")}];
+
+// 服の組み合わせ（上/羽織り/下/靴/小物）。段階 1=夏 2=半袖＋羽織り 3=長袖＋薄い上着 4=コート 5=ダウン
+const LOOKS = {
+  m1:["tee/-/shorts/sneaker/cap","polo/-/pants/sneaker/","shirtS/-/shorts/sandal/","tee/-/pants/sneaker/"],
+  m2:["tee/shirtOuter/pants/sneaker/","shirtS/-/pants/loafer/","longT/-/pants/sneaker/","polo/cardigan/pants/loafer/"],
+  m3:["shirt/cardigan/pants/loafer/","tee/jacket/pants/sneaker/","knit/-/pants/sneaker/","longT/wind/pants/sneaker/"],
+  m4:["turtle/coat/pants/loafer/","knit/trench/pants/sneaker/","hoodie/parka/pants/sneaker/","shirt/coat/pants/boots/scarf"],
+  m5:["hoodie/down/pants/sneaker/beanie","knit/coat/pants/boots/scarf,gloves","turtle/down/pants/boots/scarf","sweat/longDown/pants/sneaker/beanie"],
+  f1:["tee/-/skirt/sandal/","blouseS/-/wide/sandal/hat","tee/-/shorts/sneaker/cap","blouseS/-/longSkirt/sandal/"],
+  f2:["blouseS/cardigan/longSkirt/sandal/","tee/shirtOuter/wide/sneaker/","blouse/-/pants/loafer/","tee/cardigan/skirt/sneaker/"],
+  f3:["blouse/cardigan/skirt/loafer/","knit/-/wide/sneaker/","tee/jacket/wide/loafer/","shirt/-/longSkirt/sneaker/"],
+  f4:["turtle/trench/pants/loafer/","knit/coat/longSkirt/boots/","knit/jacket/skirt/boots/scarf","hoodie/parka/wide/sneaker/"],
+  f5:["turtle/coat/longSkirt/boots/scarf","knit/longDown/pants/boots/","hoodie/down/wide/sneaker/beanie","knit/coat/pants/boots/scarf,gloves"],
+  k1:["tee/-/shorts/sneaker/hat","tee/-/leggings/sneaker/","shirtS/-/shorts/sandal/hat","tee/-/skirt/sneaker/"],
+  k2:["tee/-/pants/sneaker/","longT/-/shorts/sneaker/","tee/cardigan/leggings/sneaker/","shirtS/-/pants/sneaker/"],
+  k3:["sweat/-/pants/sneaker/","longT/cardigan/pants/sneaker/","shirt/-/pants/sneaker/","sweat/-/skirt/sneaker/"],
+  k4:["sweat/fleece/pants/sneaker/beanie","longT/wind/pants/sneaker/","sweat/parka/leggings/sneaker/","knit/fleece/skirt/sneaker/"],
+  k5:["sweat/down/pants/sneaker/beanie,gloves","sweat/longDown/leggings/boots/scarf","knit/down/pants/boots/beanie,scarf"]
+};
+const SLEEVE = {tee:"s",polo:"s",shirtS:"s",blouseS:"s"};
+const TOP_N = {tee:"Tシャツ",polo:"ポロシャツ",shirtS:"半袖シャツ",blouseS:"半袖ブラウス",longT:"ロンT",shirt:"シャツ",blouse:"ブラウス",knit:"ニット",turtle:"タートルネック",hoodie:"パーカー",sweat:"トレーナー"};
+const OUT_N = {cardigan:"カーディガン",jacket:"ジャケット",shirtOuter:"シャツ",trench:"トレンチコート",coat:"ロングコート",down:"ダウンジャケット",longDown:"ロングダウン",parka:"マウンテンパーカー",wind:"ウインドブレーカー",fleece:"フリース"};
+const ACC_N = {scarf:"マフラー",beanie:"ニット帽",cap:"キャップ",hat:"帽子",gloves:"手袋",umbrella:"傘"};
+const isDenim = c => /デニム/.test(c[0]);
+function bottomName(k, c){
+  if(isDenim(c)) return {pants:"デニム",wide:"ワイドデニム",shorts:"デニムショーツ",skirt:"デニムスカート",longSkirt:"デニムのロングスカート",leggings:"デニムのレギンス"}[k];
+  const n = {shorts: who==="k" ? "半ズボン" : "ショートパンツ", wide:"ワイドパンツ", skirt:"スカート", longSkirt:"ロングスカート", leggings:"レギンス"}[k];
+  if(n) return c[0]+"の"+n;
+  if(who==="k") return c[0]+"の長ズボン";
+  if(who==="f") return c[0]+"のテーパードパンツ";
+  return c[0] + (/ベージュ|カーキ|白/.test(c[0]) ? "のチノパン" : "のスラックス");
+}
+function shoeName(k, c){
+  const n = {sneaker: who==="k" ? "運動靴" : "スニーカー", loafer: who==="f" ? "ローファー" : "革靴", boots:"ブーツ", rain: who==="k" ? "長靴" : "レインブーツ", sandal:"サンダル"}[k];
+  return c[0]+"の"+n;
+}
+
+// 一覧：服の組み合わせ × 季節の色。色をずらして同じ組み合わせが続かないようにする
+function coordList(p){
+  const looks = LOOKS[who+p.level].map(s => { const [t,o,b,sh,a] = s.split("/"); return {t, o:o==="-"?null:o, b, sh, a:a?a.split(","):[]}; });
+  const pals = SEASON[p.season].p.concat(who==="k" ? KID_EXTRA : []);
+  const out = [];
+  for(let r=0; r<pals.length; r++) looks.forEach((L,i) => out.push({L, pal:pals[(r+i)%pals.length], v:r*looks.length+i}));
+  return out.map(x => build(x, p));
+}
+function build({L, pal, v}, p){
+  let sh = L.sh, acc = L.a.slice();
+  if(p.rainP>=50){ acc.push("umbrella"); if(p.rainSum>=5 && sh!=="sandal") sh = "rain"; else if(sh==="sandal") sh = "sneaker"; }
+  const shoeC = sh==="rain" ? pal.a : (sh==="boots" && pal.s[0]==="白" ? C("ブラウン","#6b4630") : pal.s);
+  const tights = (L.b==="skirt"||L.b==="longSkirt") && p.level>=4;
+  const f = {top:{k:L.t,c:pal.t}, outer:L.o?{k:L.o,c:pal.o}:null, bottom:{k:L.b,c:pal.b}, shoes:{k:sh,c:shoeC}, acc:acc.map(k=>({k, c: k==="umbrella" ? C("透明","#d8e6ee") : pal.a})), girl: who==="f" || (who==="k" && v%2===1), tights};
+  const topT = `${pal.t[0]}の${who==="k"&&L.t==="longT"?"長袖Tシャツ":TOP_N[L.t]}`;
+  const outT = L.o ? `${pal.o[0]}の${OUT_N[L.o]}` : "";
+  const botT = bottomName(L.b, pal.b);
+  const accT = acc.filter(k=>k!=="umbrella").map(k => `${pal.a[0]}の${who==="k"&&k==="scarf"?"ネックウォーマー":ACC_N[k]}`);
+  f.ttl = (outT || topT) + "×" + botT.replace(/^.+?の/, "");
+  f.d = (outT ? `${topT}に${outT}を${L.o==="shirtOuter"||L.o==="cardigan"?"羽織って":"重ねて"}、${botT}。` : `${topT}に${botT}。`)
+      + `足もとは${shoeName(sh, shoeC)}。` + (accT.length ? `${accT.join("と")}をプラス。` : "")
+      + (tights ? "スカートには厚手のタイツを合わせて。" : "") + (acc.includes("umbrella") ? "雨の予報なので傘を忘れずに。" : "");
+  const seen = new Set(); f.c = [pal.t, L.o?pal.o:null, pal.b, shoeC, acc.some(k=>k!=="umbrella")?pal.a:null].filter(c => c && !seen.has(c[0]) && seen.add(c[0]));
+  return f;
+}
+
+// ---- イラスト ----
+const LN = "#5a4232", SKIN = "#f7d9c2", HAIR = "#5b3a26", LW = 2.4;
+const P = (d, fill, extra="") => `<path d="${d}" fill="${fill}" stroke="${LN}" stroke-width="${LW}" stroke-linejoin="round" ${extra}/>`;
+// 太さのある手足（外枠→中の順に描いて、つなぎ目を消す）
+function limb(pts, w, fill){
+  const d = "M" + pts.map(p=>p.join(",")).join(" L");
+  return `<path d="${d}" fill="none" stroke="${LN}" stroke-width="${w+LW*2}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${fill}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+const lerp = (a,b,t) => [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t];
+const SL = [72,113], HL = [62,170];           // 左腕（下ろす）
+const SR = [128,113], ER = [146,100], HR = [151,76]; // 右腕（手を振る）
+const shade = (hex, k) => { const n = parseInt(hex.slice(1),16); const f = v => Math.max(0,Math.min(255,Math.round(v*k))); return "#"+[n>>16,(n>>8)&255,n&255].map(f).map(v=>v.toString(16).padStart(2,"0")).join(""); };
+function sleeves(len, w, col){
+  if(len==="s") return limb([SL, lerp(SL,HL,.38)], w, col) + limb([SR, lerp(SR,ER,.75)], w, col);
+  return limb([SL, lerp(SL,HL,.86)], w, col) + limb([SR, ER, lerp(ER,HR,.7)], w, col);
+}
+function drawTop(k, col){
+  const c = col[1], dk = shade(c,.85);
+  let s = "";
+  if(k==="hoodie") s += P("M78,106 Q100,88 122,106 Q100,116 78,106 Z", dk);
+  const wide = k==="blouse"||k==="blouseS";
+  s += P(`M72,106 C86,100 114,100 128,106 L${wide?134:131},168 L${wide?66:69},168 Z`, c);
+  if(k==="knit"||k==="sweat"||k==="turtle") s += `<path d="M70,161 L130,161" stroke="${LN}" stroke-width="1.4" opacity=".5"/>`;
+  if(k==="knit") s += [118,130,142].map(y=>`<path d="M78,${y} q4,3 8,0 q4,3 8,0 M106,${y} q4,3 8,0 q4,3 8,0" fill="none" stroke="${dk}" stroke-width="1.6"/>`).join("");
+  if(k==="hoodie") s += P("M84,140 L116,140 L120,160 L80,160 Z", dk) + `<path d="M95,108 L94,126 M105,108 L106,126" stroke="${LN}" stroke-width="1.6"/>`;
+  if(k==="polo"||k==="shirt"||k==="shirtS") s += `<path d="M100,108 L100,${k==="polo"?124:166}" stroke="${LN}" stroke-width="1.3"/>` + [116,130,146].filter(y=>k!=="polo"||y<126).map(y=>`<circle cx="103" cy="${y}" r="1.4" fill="${LN}"/>`).join("");
+  return s;
+}
+function drawNeck(k, col){
+  const c = col[1];
+  if(k==="turtle") return P("M89,93 L111,93 L112,110 Q100,114 88,110 Z", c) + `<path d="M90,100 L110,100 M90,105 L110,105" stroke="${LN}" stroke-width="1" opacity=".5"/>`;
+  let s = `<path d="M90,103 Q100,113 110,103 Z" fill="${SKIN}" stroke="${LN}" stroke-width="1.6"/>`;
+  if(k==="shirt"||k==="shirtS"||k==="polo") s += P("M89,101 L100,110 L94,113 Z", c) + P("M111,101 L100,110 L106,113 Z", c);
+  if(k==="blouse"||k==="blouseS") s += P("M88,102 Q94,114 100,108 Q106,114 112,102", "#fbfaf6");
+  return s;
+}
+function drawOuter(k, col){
+  const c = col[1], dk = shade(c,.82);
+  const open = ["cardigan","jacket","shirtOuter","trench","coat"].includes(k);
+  const len = {cardigan:174,jacket:178,shirtOuter:174,trench:224,coat:228,down:180,longDown:228,parka:184,wind:180,fleece:178}[k];
+  let s = "";
+  if(k==="parka"||k==="wind") s += P("M74,108 Q100,82 126,108 Q100,118 74,108 Z", dk);
+  if(open){
+    const lw = len>200 ? 60 : 66, rw = len>200 ? 140 : 134;
+    s += P(`M70,106 C78,101 86,100 92,102 L95,${len} L${lw},${len} Z`, c) + P(`M130,106 C122,101 114,100 108,102 L105,${len} L${rw},${len} Z`, c);
+    if(k==="jacket"||k==="trench"||k==="coat") s += P("M92,102 L86,130 L80,108 Z", dk) + P("M108,102 L114,130 L120,108 Z", dk);
+    if(k==="shirtOuter") s += P("M90,101 L97,110 L92,113 Z", dk) + P("M110,101 L103,110 L108,113 Z", dk);
+    if(k==="cardigan") s += [120,136,152].map(y=>`<circle cx="91" cy="${y}" r="1.8" fill="${dk}" stroke="${LN}" stroke-width=".8"/>`).join("") + `<path d="M68,168 L94,168 M106,168 L132,168" stroke="${LN}" stroke-width="1.2" opacity=".5"/>`;
+    if(k==="trench") s += `<rect x="63" y="164" width="31" height="7" fill="${dk}" stroke="${LN}" stroke-width="1.6"/><rect x="106" y="164" width="31" height="7" fill="${dk}" stroke="${LN}" stroke-width="1.6"/>` + [138,152].map(y=>`<circle cx="88" cy="${y}" r="2" fill="${dk}" stroke="${LN}" stroke-width=".8"/>`).join("");
+    if(k==="coat") s += [140,160,180].map(y=>`<circle cx="89" cy="${y}" r="2" fill="${dk}" stroke="${LN}" stroke-width=".8"/>`).join("") + `<path d="M70,176 L86,176 M114,176 L130,176" stroke="${LN}" stroke-width="1.4"/>`;
+  } else {
+    const wB = len>200 ? 58 : 64;
+    s += P(`M68,106 C84,96 116,96 132,106 L${200-wB},${len} L${wB},${len} Z`, c);
+    s += `<path d="M100,100 L100,${len}" stroke="${LN}" stroke-width="1.5"/>`;
+    if(k==="down"||k==="longDown") for(let y=124; y<len-6; y+=20) s += `<path d="M${68-(y-106)*.05},${y} Q100,${y+5} ${132+(y-106)*.05},${y}" fill="none" stroke="${LN}" stroke-width="1.5"/>`;
+    if(k==="down"||k==="longDown"||k==="fleece") s += P("M86,98 L114,98 L113,108 L87,108 Z", c);
+    if(k==="parka") s += P("M76,150 L94,150 L94,166 L76,166 Z", dk) + P("M106,150 L124,150 L124,166 L106,166 Z", dk);
+    if(k==="fleece") s += [120,136,152].map(y=>`<path d="M76,${y} q3,-3 6,0 q3,-3 6,0 M108,${y} q3,-3 6,0 q3,-3 6,0" fill="none" stroke="${dk}" stroke-width="1.4"/>`).join("");
+  }
+  return s;
+}
+const drawLegs = legCol => limb([[88,170],[88,254]], 17, legCol) + limb([[112,170],[112,254]], 17, legCol);
+function drawBottom(k, col, legCol){
+  const c = col[1], dk = shade(c,.85);
+  let s = "";
+  if(k==="leggings") return limb([[88,170],[88,250]], 17, c) + limb([[112,170],[112,250]], 17, c) + P("M70,164 L130,164 L131,184 L69,184 Z", c);
+  const d = {
+    shorts:"M68,164 L132,164 L136,208 L103,208 L100,190 L97,208 L64,208 Z",
+    pants:"M68,164 L132,164 L127,256 L104,256 L100,192 L96,256 L73,256 Z",
+    wide:"M68,164 L132,164 L140,256 L103,256 L100,194 L97,256 L60,256 Z",
+    skirt:"M70,164 L130,164 L144,214 Q100,222 56,214 Z",
+    longSkirt:"M70,164 L130,164 L142,244 Q100,252 58,244 Z"}[k];
+  s += P(d, c);
+  if(k==="pants"||k==="wide"||k==="shorts") s += `<path d="M100,170 L100,186" stroke="${dk}" stroke-width="1.4"/>`;
+  if(k==="skirt"||k==="longSkirt") s += `<path d="M86,176 L80,${k==="skirt"?214:244} M114,176 L120,${k==="skirt"?214:244}" stroke="${dk}" stroke-width="1.4"/>`;
+  return s;
+}
+function drawShoes(k, col){
+  const c = col[1];
+  return [[86,-1],[114,1]].map(([x,dir]) => {
+    if(k==="sandal") return `<ellipse cx="${x+dir*3}" cy="263" rx="11" ry="6" fill="${SKIN}" stroke="${LN}" stroke-width="${LW}"/><path d="M${x-6+dir*3},259 L${x+8+dir*3},259 M${x-4+dir*3},264 L${x+6+dir*3},264" stroke="${c==="#f6f5f1"?"#a07850":c}" stroke-width="3"/>`;
+    if(k==="boots"||k==="rain") return P(`M${x-10},${k==="rain"?226:236} L${x+10},${k==="rain"?226:236} L${x+10},258 Q${x+dir*16+(dir>0?6:-6)},258 ${x+dir*16+(dir>0?6:-6)},266 L${x-dir*12},266 Q${x-dir*12},262 ${x-10*dir},258 Z`, c) + (k==="rain" ? `<path d="M${x-5},232 L${x-5},250" stroke="#ffffff" stroke-width="2.4" opacity=".6"/>` : "");
+    return P(`M${x-dir*12},266 Q${x-dir*13},256 ${x-dir*4},255 L${x+dir*6},257 Q${x+dir*17},259 ${x+dir*17},266 Z`, c) + (k==="sneaker" ? `<path d="M${x-dir*11},263 L${x+dir*16},263" stroke="${c==="#f6f5f1"?"#b8b4aa":"#f6f5f1"}" stroke-width="2"/>` : "");
+  }).join("");
+}
+function drawHead(f){
+  const kid = who==="k", g = f.girl;
+  let s = "";
+  if(g && kid) s += `<circle cx="58" cy="78" r="11" fill="${HAIR}" stroke="${LN}" stroke-width="${LW}"/><circle cx="142" cy="78" r="11" fill="${HAIR}" stroke="${LN}" stroke-width="${LW}"/>`;
+  s += `<circle cx="100" cy="66" r="${kid?37:35}" fill="${SKIN}" stroke="${LN}" stroke-width="${LW}"/>`;
+  s += `<ellipse cx="89" cy="72" rx="3.2" ry="4.2" fill="${LN}"/><ellipse cx="111" cy="72" rx="3.2" ry="4.2" fill="${LN}"/><circle cx="90" cy="70.5" r="1.1" fill="#fff"/><circle cx="112" cy="70.5" r="1.1" fill="#fff"/>`;
+  s += `<ellipse cx="81" cy="82" rx="6" ry="3.5" fill="#f2a59a" opacity=".65"/><ellipse cx="119" cy="82" rx="6" ry="3.5" fill="#f2a59a" opacity=".65"/><path d="M96,84 Q100,88 104,84" fill="none" stroke="${LN}" stroke-width="1.8" stroke-linecap="round"/>`;
+  if(g) s += P("M63,70 C56,18 144,18 137,70 C128,52 112,46 100,50 C90,46 74,52 64,68 Z", HAIR);
+  else s += P(kid ? "M66,62 C64,34 90,26 104,29 C122,30 138,44 134,62 C126,50 114,46 104,50 C92,46 76,50 66,62 Z M98,30 Q102,20 108,24" : "M65,64 C62,34 88,26 104,28 C124,30 140,44 135,64 C130,52 120,46 110,48 C98,44 80,50 65,64 Z", HAIR);
+  for(const a of f.acc){
+    const c = a.c[1];
+    if(a.k==="beanie") s += P("M63,58 C63,24 137,24 137,58 Z", c) + P("M61,52 L139,52 L139,64 L61,64 Z", shade(c,.85)) + `<circle cx="100" cy="25" r="7" fill="${c}" stroke="${LN}" stroke-width="${LW}"/>`;
+    if(a.k==="cap") s += P("M66,56 C66,26 134,26 134,56 Z", c) + P("M64,56 Q100,48 140,58 Q100,64 64,56 Z", shade(c,.85));
+    if(a.k==="hat") s += P("M68,54 C68,28 132,28 132,54 Z", c) + `<ellipse cx="100" cy="55" rx="46" ry="8" fill="${shade(c,.9)}" stroke="${LN}" stroke-width="${LW}"/>`;
+  }
+  return s;
+}
+function draw(f){
+  const kid = who==="k";
+  const top = f.top, out = f.outer;
+  const legCol = f.tights ? "#3a3438" : SKIN;
+  let body = "";
+  if(f.girl && !kid) body += P("M62,64 C58,40 142,40 138,64 L142,124 Q100,134 58,124 Z", HAIR);
+  body += drawLegs(f.bottom.k==="leggings" ? f.bottom.c[1] : legCol);
+  body += drawShoes(f.shoes.k, f.shoes.c);
+  body += drawBottom(f.bottom.k, f.bottom.c, legCol);
+  body += limb([SL,HL], 14, SKIN) + limb([SR,ER,HR], 14, SKIN);
+  body += drawTop(top.k, top.c);
+  body += sleeves(SLEEVE[top.k] || "l", 15, top.c[1]);
+  if(out){ body += drawOuter(out.k, out.c); body += sleeves("l", /down/i.test(out.k) ? 19 : 17, out.c[1]); }
+  body += drawNeck(top.k, top.c);
+  const scarf = f.acc.find(a=>a.k==="scarf");
+  if(scarf) body += P("M80,98 Q100,92 120,98 L121,112 Q100,118 79,112 Z", scarf.c[1]) + P("M104,108 L116,108 L118,142 L106,142 Z", scarf.c[1]) + `<path d="M108,142 L108,147 M112,142 L112,147 M116,142 L116,147" stroke="${LN}" stroke-width="1.4"/>`;
+  const glove = f.acc.find(a=>a.k==="gloves");
+  const hand = glove ? glove.c[1] : SKIN;
+  body += `<circle cx="${HL[0]}" cy="${HL[1]}" r="8" fill="${hand}" stroke="${LN}" stroke-width="${LW}"/><circle cx="${HR[0]}" cy="${HR[1]}" r="8" fill="${hand}" stroke="${LN}" stroke-width="${LW}"/>`;
+  if(f.acc.some(a=>a.k==="umbrella")) body += `<path d="M151,76 L156,18" stroke="${LN}" stroke-width="2.4"/>` + P("M108,26 Q156,-14 204,26 Q192,20 180,26 Q168,20 156,26 Q144,20 132,26 Q120,20 108,26 Z", "#d8e6ee", 'fill-opacity=".85"');
+  const tf = kid ? `transform="translate(0,18) translate(100,100) scale(0.92,0.8) translate(-100,-100)"` : "";
+  return `<svg viewBox="0 -6 210 284" role="img" aria-label="${esc(f.ttl)}のイラスト"><g ${tf}>${body}</g><g ${kid?'transform="translate(0,14)"':""}>${drawHead(f)}</g></svg>`;
+}
+
 function seasonOf(dateStr){ const m = +dateStr.slice(5,7); return m>=3&&m<=5 ? "spring" : m>=6&&m<=8 ? "summer" : m>=9&&m<=11 ? "autumn" : "winter"; }
 function levelOf(dayT, outT){
   if(dayT>=26) return 1;
@@ -334,30 +499,27 @@ function levelOf(dayT, outT){
   return 5;
 }
 let coordIdx = 0;
-// 季節に合う色のコーデを先に出す（逆の季節の色は最後）
-function coordList(p){
-  const tag = SEASON[p.season].tag;
-  const score = x => !x.t ? 1 : x.t===tag ? 0 : (tag ? 2 : 1);
-  return COORDS.filter(x => x.g===who+p.level).map((x,i)=>[x,i])
-    .sort((a,b) => score(a[0])-score(b[0]) || a[1]-b[1]).map(a => a[0]);
-}
+const ICON = {
+  "トップス":"M8 4 L4 7 L6 10.5 L8 9.5 V20 H16 V9.5 L18 10.5 L20 7 L16 4 Q12 7.5 8 4 Z",
+  "上着":"M8 3.5 L4 7 V20 H11 V8 M16 3.5 L20 7 V20 H13 V8 M8 3.5 L11 8 L12 6.5 L13 8 L16 3.5",
+  "ボトムス":"M7 4 H17 L18.5 20 H14 L12 10 L10 20 H5.5 Z",
+  "足もと":"M3 16 Q3 10 7 10 L11 12 Q18 13 21 16 V18.5 H3 Z",
+  "持ち物":"M5 9 H19 L18 20 H6 Z M9 9 V7 Q12 3.5 15 7 V9"};
+const icon = k => ICON[k] ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON[k]}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>` : "";
 const chips = cs => `<ul class="chips">${cs.map(([n,h]) => `<li><i style="background:${h}"></i>${n}</li>`).join("")}</ul>`;
 function coordInner(p){
   const list = coordList(p); if(!list.length) return "";
   const n = coordIdx % list.length, x = list[n], s = SEASON[p.season];
   return `<h3>おすすめコーデ<span>${WHO[who].label}・${s.name}</span></h3>
       <div class="coord">
-        <figure>
-          <img src="img/${x.g}-${x.id}.jpg" alt="${esc(x.ttl)}のコーディネート" width="600" height="800">
-          <figcaption>写真：<a href="https://unsplash.com/photos/${x.id}" target="_blank" rel="noopener">Unsplash</a></figcaption>
-        </figure>
+        <figure class="ill">${draw(x)}</figure>
         <div class="body">
           <div class="num">コーデ ${n+1} ／ ${list.length}</div>
           <p class="ttl">${esc(x.ttl)}</p>
           <p class="desc">${esc(x.d)}</p>
           ${chips(x.c)}
           <div class="season"><p>${s.name}の色：${s.note}</p>${chips(s.c)}</div>
-          ${list.length>1 ? `<button class="change" type="button" id="change">チェンジ</button>` : ""}
+          <button class="change" type="button" id="change">チェンジ</button>
         </div>
       </div>`;
 }
@@ -459,7 +621,7 @@ function plan(i, who){
   else if(who==="f" && outT<13) notes.push(["", "足首やひざが冷えやすい日。スカートならタイツを合わせて。"]);
 
   return {hi, lo, dayFeel, mornFeel, eveFeel, rainP, wind, uv, code, items, notes, head:headline(dayT, outT),
-    level:levelOf(dayT, outT), season:seasonOf(data.daily.time[i])};
+    level:levelOf(dayT, outT), season:seasonOf(data.daily.time[i]), rainSum};
 }
 function rainTime(i){
   const H = data.hourly, s = i*24; const hrs = [];
@@ -497,7 +659,7 @@ function render(){
     <section>
       <h3>着ていくもの<span>${WHO[who].label}の目安</span></h3>
       <ul class="outfit">
-        ${p.items.map(([k,v,why]) => `<li><span class="k">${k}</span><span class="v">${v}${why?`<span class="why">${why}</span>`:""}</span></li>`).join("")}
+        ${p.items.map(([k,v,why]) => `<li><span class="k">${icon(k)}${k}</span><span class="v">${v}${why?`<span class="why">${why}</span>`:""}</span></li>`).join("")}
       </ul>
     </section>
 
