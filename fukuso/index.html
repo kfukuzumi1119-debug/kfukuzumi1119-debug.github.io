@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>きょうの服装予報｜天気と気温から今日の服装がわかる</title>
-<meta name="description" content="今日・明日の天気、最高・最低気温、体感温度、降水確率から、その日に着ていく服装を自動で提案する無料のWebページ。上着がいるか、傘がいるか、朝晩の寒暖差まで一目でわかります。札幌から那覇まで全国の主要都市に対応。">
+<title>今日の服装は？天気と気温で半袖・長袖・上着がわかる｜きょうの服装予報</title>
+<meta name="description" content="今日は半袖で寒い？上着はいる？天気・体感温度・降水確率から、今日と明日の服装（トップス・上着・ボトムス）と傘の要否を提案。札幌〜那覇の15都市、男性・女性・子ども別のコーデ例つき。">
 <link rel="canonical" href="https://kfukuzumi1119-debug.github.io/fukuso/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="きょうの服装予報">
-<meta property="og:title" content="きょうの服装予報｜天気と気温から今日の服装がわかる">
+<meta property="og:title" content="今日の服装は？天気と気温で半袖・長袖・上着がわかる">
 <meta property="og:description" content="天気・気温・体感温度・降水確率から、その日の服装と持ち物を提案。上着や傘がいるか一目でわかります。">
 <meta property="og:url" content="https://kfukuzumi1119-debug.github.io/fukuso/">
 <meta property="og:image" content="https://kfukuzumi1119-debug.github.io/fukuso/og-image.png">
@@ -29,6 +29,9 @@
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
 }
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "今日は半袖だと寒い？", "acceptedAnswer": {"@type": "Answer", "text": "日中の体感温度が23℃以上なら半袖で過ごせる目安です。22℃以下の日や、朝晩の体感温度が20℃を下回る日は、カーディガンなど羽織るものを持っていきましょう。"}}, {"@type": "Question", "name": "半袖と長袖、どっちがいい？", "acceptedAnswer": {"@type": "Answer", "text": "日中の体感温度が27℃以上なら半袖、23〜26℃なら半袖か薄手の長袖、19〜22℃なら長袖1枚、18℃以下なら長袖に薄手のニットを重ねるのが目安です。"}}, {"@type": "Question", "name": "今日は上着がいる？", "acceptedAnswer": {"@type": "Answer", "text": "朝（7〜9時）と夜（18〜21時）の体感温度で決めます。21℃未満なら何か羽織るものを。17〜20℃はカーディガン、13〜16℃はジャケットやトレンチコート、9〜12℃はウールのコート、8℃以下はダウンが目安です。"}}, {"@type": "Question", "name": "ニットは何度から？", "acceptedAnswer": {"@type": "Answer", "text": "日中の体感温度が18℃を下回ったら薄手のニット、14℃を下回ったらしっかりしたニットやスウェット、10℃以下なら厚手のニットに保温インナーが目安です。"}}, {"@type": "Question", "name": "コートは何度から？", "acceptedAnswer": {"@type": "Answer", "text": "朝晩の体感温度が16℃以下ならトレンチコートやジャケット、12℃以下ならウールのコートが目安です。"}}, {"@type": "Question", "name": "ダウンジャケットは何度から？", "acceptedAnswer": {"@type": "Answer", "text": "朝晩の体感温度が8℃以下になったらダウンや厚手のコートが目安です。3℃以下ならマフラーや手袋も足しましょう。"}}, {"@type": "Question", "name": "寒がり・暑がりの人は？", "acceptedAnswer": {"@type": "Answer", "text": "ページ上部の「感じ方」で「寒がり」を選ぶと体感温度を2℃低く、「暑がり」を選ぶと2℃高く見積もって服装を提案します。"}}, {"@type": "Question", "name": "気温と体感温度はどう違う？", "acceptedAnswer": {"@type": "Answer", "text": "体感温度は、気温に風の強さや湿度を加えて、人が実際に感じる暑さ寒さを表した値です。風が強い日は気温より低く、蒸し暑い日は高くなります。このページは体感温度で服装を選んでいます。"}}]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,6 +136,15 @@ section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing
 .cols,.col{display:flex;flex-direction:column;gap:18px;min-width:0}
 @media (min-width:980px){.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
 .guide p,footer{max-width:72ch}
+.intro{margin:-6px 0 0;font-size:14px;color:var(--muted)}
+.faq{display:flex;flex-direction:column;gap:0;max-width:72ch}
+.faq h3,.cities h3{margin:0 0 8px}
+.faq details{border-top:1px solid var(--line);padding:10px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:700;font-size:15px}
+.faq details p{margin:6px 0 0;font-size:14px;color:var(--muted)}
+.cities ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+.cities a{color:var(--accent)}
 footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 footer a{color:var(--accent)}
 @media (max-width:600px){
@@ -155,6 +167,7 @@ footer a{color:var(--accent)}
     <h1>きょうの服装予報</h1>
     <div class="date" id="date"></div>
   </header>
+  <p class="intro" id="intro">今日は半袖で寒い？上着はいる？ 天気予報の気温・体感温度・雨から、今日と明日の服装をすぐに提案します。</p>
 
   <div class="place">
     <label for="city" class="eyebrow">場所</label>
@@ -164,6 +177,11 @@ footer a{color:var(--accent)}
   <div class="who">
     <span class="eyebrow">だれの服？</span>
     <div class="seg" role="radiogroup" aria-label="だれの服" id="who"></div>
+  </div>
+
+  <div class="who">
+    <span class="eyebrow">感じ方</span>
+    <div class="seg" role="radiogroup" aria-label="暑さ寒さの感じ方" id="sense"></div>
   </div>
 
   <div class="tabs" role="tablist" id="tabs"></div>
@@ -191,6 +209,23 @@ footer a{color:var(--accent)}
     <p style="margin-top:8px">上着は、日中ではなく朝（7〜9時）と夜（18〜21時）の体感温度の低いほうで選ぶと、行き帰りに寒い思いをしません。子どもはよく動くので、大人より1枚少なめが目安です。上の「だれの服？」で男性・女性・子どもを切り替えると、それぞれに合った服の名前で提案します。</p>
   </section>
 
+  <section class="faq">
+    <h3>よくある質問</h3>
+      <details><summary>今日は半袖だと寒い？</summary><p>日中の体感温度が23℃以上なら半袖で過ごせる目安です。22℃以下の日や、朝晩の体感温度が20℃を下回る日は、カーディガンなど羽織るものを持っていきましょう。</p></details>
+      <details><summary>半袖と長袖、どっちがいい？</summary><p>日中の体感温度が27℃以上なら半袖、23〜26℃なら半袖か薄手の長袖、19〜22℃なら長袖1枚、18℃以下なら長袖に薄手のニットを重ねるのが目安です。</p></details>
+      <details><summary>今日は上着がいる？</summary><p>朝（7〜9時）と夜（18〜21時）の体感温度で決めます。21℃未満なら何か羽織るものを。17〜20℃はカーディガン、13〜16℃はジャケットやトレンチコート、9〜12℃はウールのコート、8℃以下はダウンが目安です。</p></details>
+      <details><summary>ニットは何度から？</summary><p>日中の体感温度が18℃を下回ったら薄手のニット、14℃を下回ったらしっかりしたニットやスウェット、10℃以下なら厚手のニットに保温インナーが目安です。</p></details>
+      <details><summary>コートは何度から？</summary><p>朝晩の体感温度が16℃以下ならトレンチコートやジャケット、12℃以下ならウールのコートが目安です。</p></details>
+      <details><summary>ダウンジャケットは何度から？</summary><p>朝晩の体感温度が8℃以下になったらダウンや厚手のコートが目安です。3℃以下ならマフラーや手袋も足しましょう。</p></details>
+      <details><summary>寒がり・暑がりの人は？</summary><p>ページ上部の「感じ方」で「寒がり」を選ぶと体感温度を2℃低く、「暑がり」を選ぶと2℃高く見積もって服装を提案します。</p></details>
+      <details><summary>気温と体感温度はどう違う？</summary><p>体感温度は、気温に風の強さや湿度を加えて、人が実際に感じる暑さ寒さを表した値です。風が強い日は気温より低く、蒸し暑い日は高くなります。このページは体感温度で服装を選んでいます。</p></details>
+  </section>
+
+  <section class="cities">
+    <h3>都市ごとの今日の服装</h3>
+    <ul><li><a href="./sapporo/">札幌の今日の服装</a></li><li><a href="./sendai/">仙台の今日の服装</a></li><li><a href="./niigata/">新潟の今日の服装</a></li><li><a href="./tokyo/">東京の今日の服装</a></li><li><a href="./yokohama/">横浜の今日の服装</a></li><li><a href="./nagoya/">名古屋の今日の服装</a></li><li><a href="./kanazawa/">金沢の今日の服装</a></li><li><a href="./kyoto/">京都の今日の服装</a></li><li><a href="./osaka/">大阪の今日の服装</a></li><li><a href="./kobe/">神戸の今日の服装</a></li><li><a href="./hiroshima/">広島の今日の服装</a></li><li><a href="./takamatsu/">高松の今日の服装</a></li><li><a href="./fukuoka/">福岡の今日の服装</a></li><li><a href="./kagoshima/">鹿児島の今日の服装</a></li><li><a href="./naha/">那覇の今日の服装</a></li></ul>
+  </section>
+
   <footer>
     天気データ：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>（気象庁などのモデルをもとにした予報）。体感温度は気温・湿度・風から計算した値です。服装は目安なので、寒がり・暑がりに合わせて調整してください。<br><a href="/">トップページ</a>　<a href="/atsugi-kids/privacy.html">プライバシーポリシー</a>
   </footer>
@@ -198,19 +233,23 @@ footer a{color:var(--accent)}
 
 <script>
 const PRESETS = [
-  ["札幌",43.0618,141.3545],["仙台",38.2682,140.8694],["新潟",37.9161,139.0364],["東京",35.6895,139.6917],
-  ["横浜",35.4437,139.6380],["名古屋",35.1815,136.9066],["金沢",36.5613,136.6562],["京都",35.0116,135.7681],
-  ["大阪",34.6937,135.5023],["神戸",34.6901,135.1955],["広島",34.3853,132.4553],["高松",34.3428,134.0466],
-  ["福岡",33.5904,130.4017],["鹿児島",31.5966,130.5571],["那覇",26.2124,127.6809]
+  ["札幌",43.0618,141.3545,"sapporo"],["仙台",38.2682,140.8694,"sendai"],["新潟",37.9161,139.0364,"niigata"],["東京",35.6895,139.6917,"tokyo"],
+  ["横浜",35.4437,139.6380,"yokohama"],["名古屋",35.1815,136.9066,"nagoya"],["金沢",36.5613,136.6562,"kanazawa"],["京都",35.0116,135.7681,"kyoto"],
+  ["大阪",34.6937,135.5023,"osaka"],["神戸",34.6901,135.1955,"kobe"],["広島",34.3853,132.4553,"hiroshima"],["高松",34.3428,134.0466,"takamatsu"],
+  ["福岡",33.5904,130.4017,"fukuoka"],["鹿児島",31.5966,130.5571,"kagoshima"],["那覇",26.2124,127.6809,"naha"]
 ];
+// 都市のページ（/fukuso/tokyo/ など）では、その都市に固定する
+const FIXED = window.FIXED_CITY ? PRESETS.find(p => p[3]===window.FIXED_CITY) : null;
 const WX = {0:"快晴",1:"晴れ",2:"晴れ時々くもり",3:"くもり",45:"霧",48:"霧",51:"霧雨",53:"霧雨",55:"霧雨",
   56:"冷たい霧雨",57:"冷たい霧雨",61:"小雨",63:"雨",65:"強い雨",66:"冷たい雨",67:"冷たい雨",71:"小雪",73:"雪",75:"大雪",
   77:"雪",80:"にわか雨",81:"にわか雨",82:"激しいにわか雨",85:"にわか雪",86:"強いにわか雪",95:"雷雨",96:"雷雨（ひょう）",99:"雷雨（ひょう）"};
 const DAYNAME = ["今日","明日","あさって"];
 const WEEK = "日月火水木金土";
 
-let place = load();
+let place = FIXED ? {name:FIXED[0],lat:FIXED[1],lon:FIXED[2]} : load();
 if(!place || !PRESETS.some(p => p[0]===place.name)) place = {name:"東京",lat:35.6895,lon:139.6917};
+let sense = (() => { try{ return +localStorage.getItem("fukuso-sense") || 0; }catch(e){ return 0; } })();
+if(![-2,0,2].includes(sense)) sense = 0;
 let data = null, dayIdx = 0;
 let who = (() => { try{ return localStorage.getItem("fukuso-who"); }catch(e){ return null; } })();
 if(!["m","f","k"].includes(who)) who = "m";
@@ -230,7 +269,10 @@ function fillSelect(){
 $("city").addEventListener("change", e => {
   const [lat,lon] = e.target.value.split(",").map(Number);
   place = {name:e.target.selectedOptions[0].textContent, lat, lon};
-  save(); fetchWeather();
+  save();
+  // 都市を変えたら、その都市のページへ移る
+  const c = PRESETS.find(p => p[0]===place.name);
+  location.href = (FIXED ? "../" : "./") + c[3] + "/";
 });
 // だれの服
 function fillWho(){
@@ -239,6 +281,16 @@ function fillWho(){
   el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
     who = b.dataset.k; coordIdx = 0; try{ localStorage.setItem("fukuso-who", who); }catch(e){}
     fillWho(); render();
+  }));
+}
+
+// 感じ方
+function fillSense(){
+  const el = $("sense");
+  el.innerHTML = [[-2,"寒がり"],[0,"ふつう"],[2,"暑がり"]].map(([v,n]) => `<button type="button" role="radio" aria-checked="${v===sense}" data-v="${v}">${n}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    sense = +b.dataset.v; coordIdx = 0; try{ localStorage.setItem("fukuso-sense", sense); }catch(e){}
+    fillSense(); render();
   }));
 }
 
@@ -590,7 +642,7 @@ function plan(i, who){
   const snow = [71,73,75,77,85,86].includes(code);
 
   // 子どもはよく動くので、体感を3℃高く見て大人より1枚少なめにする
-  const kid = who==="k", adj = kid ? 3 : 0;
+  const kid = who==="k", adj = (kid ? 3 : 0) + sense;
   const dayT = dayFeel+adj, outT = outerT+adj, sh = WHO[who].shoes;
   const [tp, tpWhy] = topWear(dayT, who);
   const [ot, otWhy] = outerWear(outT, who);
@@ -620,6 +672,7 @@ function plan(i, who){
   else if(wind>=5 && dayFeel<18) notes.push(["", `やや風あり（最大 ${r0(wind)}m/s）。首もとを覆えるとあたたか。`]);
   if(uv>=8) notes.push(["w", `紫外線がとても強い（UV ${uv.toFixed(0)}）。長袖の薄手羽織りや日傘も。`]);
   if(hi>=31) notes.push(["w", "熱中症に注意。こまめに水分をとって。"]);
+  if(sense) notes.push(["", sense<0 ? "寒がり向けに、体感温度を2℃低く見て1枚多めに提案しています。" : "暑がり向けに、体感温度を2℃高く見て1枚少なめに提案しています。"]);
   if(kid) notes.push(["", dayFeel>=20 ? "よく動くので大人より1枚少なめにしています。汗をかいたら着替えを。" : "よく動くので大人より1枚少なめにしています。脱ぎ着しやすい前開きの上着が便利。"]);
   else if(who==="f" && outT<13) notes.push(["", "足首やひざが冷えやすい日。スカートならタイツを合わせて。"]);
 
@@ -715,7 +768,7 @@ function chart(i){
 
 // 夜（19時以降）に開いたら明日を最初に見せる
 if(new Date().getHours()>=19) dayIdx = 1;
-fillSelect(); fillWho(); fillTabs(); fetchWeather();
+fillSelect(); fillWho(); fillSense(); fillTabs(); fetchWeather();
 </script>
 </body>
 </html>
