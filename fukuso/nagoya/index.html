@@ -14,6 +14,8 @@
 <meta property="og:image" content="https://kfukuzumi1119-debug.github.io/fukuso/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1d6a85">
+<link rel="icon" href="../favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="../favicon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../icon-180.png">
 <script type="application/ld+json">
@@ -109,18 +111,22 @@ section h3 span{font-weight:400;font-size:12px;color:var(--muted);letter-spacing
 .chart svg{display:block;width:100%;min-width:520px;height:auto}
 .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);padding:0 12px 6px}
 .legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
-.coord{background:var(--paper);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr)}
-.coord figure{margin:0;border-right:1px solid var(--line);display:flex;flex-direction:column}
-.coord .ill{background:#f3ebe0;display:flex;align-items:center;justify-content:center;padding:12px 8px}
-.coord .ill svg{display:block;width:100%;max-width:210px;height:auto}
-.coord .body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.coord .num{font-size:12px;color:var(--muted);letter-spacing:.08em;font-variant-numeric:tabular-nums}
-.coord .ttl{margin:0;font-size:17px;font-weight:700;line-height:1.5}
-.coord .desc{margin:0;font-size:14px}
+.coords{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.card .ill{margin:0;background:#f3ebe0;display:flex;justify-content:center;padding:10px 8px}
+.card .ill svg{display:block;width:100%;max-width:170px;height:auto}
+.card .body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card .ttl{margin:0;font-size:14px;font-weight:700;line-height:1.5}
+.card .desc{margin:0;font-size:12.5px;color:var(--muted);line-height:1.65}
+.card .chips{font-size:11px;gap:4px 10px}
+.card .chips i{width:13px;height:13px}
+.coordfoot{margin-top:12px;background:var(--paper);border:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.coordfoot .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.coordfoot .num{font-size:12px;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
 .chips{display:flex;flex-wrap:wrap;gap:6px 12px;margin:0;padding:0;list-style:none;font-size:12px;color:var(--muted)}
 .chips li{display:flex;align-items:center;gap:5px}
 .chips i{width:16px;height:16px;border:1px solid var(--line);display:inline-block;flex:none}
-.season{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.season{display:flex;flex-direction:column;gap:6px}
 .season p{margin:0;font-size:13px;color:var(--muted)}
 .change{align-self:flex-start;background:var(--ink);color:var(--paper);border:0;border-radius:2px;padding:9px 20px;font-weight:700;cursor:pointer;letter-spacing:.06em}
 .change:hover{background:var(--accent)}
@@ -152,12 +158,11 @@ footer a{color:var(--accent)}
   .board{grid-template-columns:1fr}
   .verdict{border-right:0;border-bottom:1px solid var(--line)}
   .verdict h2{font-size:21px}
-  .coord{grid-template-columns:minmax(0,150px) minmax(0,1fr)}
-  .coord .body{padding:12px;gap:10px}
-  .coord .ttl{font-size:15px}
+  .card .body{padding:8px 10px 10px}
+  .card .ttl{font-size:13px}
   .outfit li{grid-template-columns:6.2em minmax(0,1fr);padding:10px 12px}
 }
-@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}.coord .ill svg{animation:fade .3s ease-out}}
+@media (prefers-reduced-motion:no-preference){.board,.outfit{animation:in .35s ease-out}.card .ill svg{animation:fade .3s ease-out}}
 @keyframes fade{from{opacity:.4}to{opacity:1}}
 @keyframes in{from{transform:translateY(4px)}to{transform:none}}
 </style>
@@ -564,20 +569,28 @@ const ICON = {
   "持ち物":"M5 9 H19 L18 20 H6 Z M9 9 V7 Q12 3.5 15 7 V9"};
 const icon = k => ICON[k] ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON[k]}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg>` : "";
 const chips = cs => `<ul class="chips">${cs.map(([n,h]) => `<li><i style="background:${h}"></i>${n}</li>`).join("")}</ul>`;
+const PER = 4;
 function coordInner(p){
   const list = coordList(p); if(!list.length) return "";
-  const n = coordIdx % list.length, x = list[n], s = SEASON[p.season];
+  const pages = Math.ceil(list.length / PER), pg = coordIdx % pages, s = SEASON[p.season];
+  const shown = list.slice(pg*PER, pg*PER + PER);
   return `<h3>おすすめコーデ<span>${WHO[who].label}・${s.name}</span></h3>
-      <div class="coord">
-        <figure class="ill">${draw(x)}</figure>
-        <div class="body">
-          <div class="num">コーデ ${n+1} ／ ${list.length}</div>
-          <p class="ttl">${esc(x.ttl)}</p>
-          <p class="desc">${esc(x.d)}</p>
-          ${chips(x.c)}
-          <div class="season"><p>${s.name}の色：${s.note}</p>${chips(s.c)}</div>
-          <button class="change" type="button" id="change">チェンジ</button>
+      <div class="coords">
+        ${shown.map(x => `<div class="card">
+          <figure class="ill">${draw(x)}</figure>
+          <div class="body">
+            <p class="ttl">${esc(x.ttl)}</p>
+            <p class="desc">${esc(x.d)}</p>
+            ${chips(x.c)}
+          </div>
+        </div>`).join("")}
+      </div>
+      <div class="coordfoot">
+        <div class="row">
+          <span class="num">全${list.length}パターン中 ${pg*PER+1}〜${pg*PER+shown.length}</span>
+          ${pages>1 ? `<button class="change" type="button" id="change">ほかのコーデを見る</button>` : ""}
         </div>
+        <div class="season"><p>${s.name}の色：${s.note}</p>${chips(s.c)}</div>
       </div>`;
 }
 function showCoord(p, focus){
