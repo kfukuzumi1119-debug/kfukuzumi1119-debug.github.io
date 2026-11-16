@@ -3,64 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>週末子連れカレンダー 県央版｜神奈川県央の子連れイベント</title>
-<meta name="description" content="厚木・海老名・座間・綾瀬・大和・相模原・伊勢原・愛川・清川で開かれる、子連れで楽しめるイベントを毎週金曜日にまとめている「週末子連れカレンダー 県央版」です。">
+<title>hibitool（ひびツール）｜毎日に使える無料ツール集</title>
+<meta name="description" content="今日の服装、献立、子連れイベント、通販セール、2〜4歳の知育あそび、製造業向けのポンチ絵・三角比計算など、毎日の暮らしと仕事に使える無料のWebツールを集めたサイトです。">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="週末子連れカレンダー 県央版">
-<meta property="og:title" content="週末子連れカレンダー 県央版">
-<meta property="og:description" content="神奈川県央の子ども・親子イベントを毎週更新。今週末のおでかけ先が見つかります。">
-<meta property="og:url" content="https://kfukuzumi1119-debug.github.io/">
-<meta property="og:image" content="https://kfukuzumi1119-debug.github.io/og-image.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#00704a">
-<link rel="canonical" href="https://kfukuzumi1119-debug.github.io/">
+<meta property="og:site_name" content="hibitool（ひびツール）">
+<meta property="og:title" content="hibitool（ひびツール）｜毎日に使える無料ツール集">
+<meta property="og:description" content="服装・献立・子連れイベント・セール・知育・ものづくり。毎日に使える無料のWebツール集。">
+<meta property="og:url" content="https://hibitool.com/">
+<meta name="theme-color" content="#24466b">
+<link rel="canonical" href="https://hibitool.com/">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Dela+Gothic+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "週末子連れカレンダー 県央版",
-  "alternateName": ["週末子連れカレンダー", "県央の子連れイベント"],
-  "url": "https://kfukuzumi1119-debug.github.io/"
-}
+{"@context":"https://schema.org","@type":"WebSite","name":"hibitool","alternateName":["ひびツール","hibitool（ひびツール）"],"url":"https://hibitool.com/"}
 </script>
 <style>
-  :root { --paper: #ffffff; --ink: #1d211f; --muted: #5d645f; --green: #00704a; --marker: #ffe14d; }
-  @media (prefers-color-scheme: dark) {
-    :root { --paper: #151917; --ink: #e7ebe8; --muted: #a3aca6; --green: #39b583; --marker: rgba(255, 225, 77, 0.35); color-scheme: dark; }
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic UI", sans-serif; line-height: 1.75; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 28px 16px 48px; }
-  .bar { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding-bottom: 6px; border-bottom: 1px solid var(--ink); font-size: 12px; font-weight: 700; }
-  h1 { margin: 14px 0 0; font-family: "Dela Gothic One", sans-serif; font-weight: 400; font-size: clamp(30px, 8vw, 52px); line-height: 1.2; }
-  h1 .ed { display: inline-block; margin-left: 0.3em; padding: 0.1em 0.4em; background: var(--green); color: #fff; font-family: "BIZ UDPGothic", sans-serif; font-weight: 700; font-size: max(14px, 0.38em); vertical-align: 0.5em; }
-  .rule { height: 6px; margin: 14px 0 18px; background: var(--ink); }
-  .lead { margin: 0 0 6px; font-size: 20px; font-weight: 700; }
-  .lead span { background: linear-gradient(transparent 55%, var(--marker) 55%); }
-  .areas { margin: 0 0 22px; color: var(--muted); font-size: 14px; }
-  .go { display: inline-block; padding: 12px 22px; background: var(--green); color: #fff; font-weight: 700; text-decoration: none; }
-  .go:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  footer { margin-top: 36px; padding-top: 10px; border-top: 1px solid var(--ink); color: var(--muted); font-size: 12px; }
-  footer a { color: var(--muted); }
+/* 道具箱の棚：分類ごとの見出しの下に、各ツールを罫線で区切って並べる */
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#1c2733;--muted:#5d6874;--line:#d6dde4;--accent:#24466b;--sun:#e8893a;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--sun:#f0a35e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--sun:#f0a35e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;line-height:1.75}
+.wrap{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:32px 48px}
+header{border-bottom:2px solid var(--ink);padding-bottom:14px;display:flex;align-items:center;gap:14px}
+header img{width:52px;height:52px;flex:none}
+h1{margin:0;font-size:clamp(26px,5vw,36px);line-height:1.2;letter-spacing:.02em}
+h1 small{display:block;font-size:14px;color:var(--muted);font-weight:400;letter-spacing:.08em}
+.lead{margin:16px 0 28px;color:var(--muted)}
+h2{margin:28px 0 10px;font-size:15px;letter-spacing:.12em;color:var(--accent)}
+ul.tools{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--line)}
+ul.tools li+li{border-top:1px solid var(--line)}
+ul.tools a{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;color:inherit;text-decoration:none}
+ul.tools a:hover .n{color:var(--accent);text-decoration:underline}
+ul.tools a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+ul.tools img{width:40px;height:40px;border-radius:8px}
+.n{font-weight:700;font-size:16px}
+.d{display:block;font-size:13px;color:var(--muted);line-height:1.6}
+.host{font-size:12px;color:var(--muted);white-space:nowrap}
+footer{margin-top:40px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--muted)}
+@media (max-width:560px){ul.tools a{grid-template-columns:36px minmax(0,1fr)}.host{display:none}ul.tools img{width:36px;height:36px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="bar"><span>神奈川県央の子連れおでかけ情報</span><span>毎週金曜更新</span></div>
-  <h1>週末子連れカレンダー<span class="ed">県央版</span></h1>
-  <div class="rule"></div>
-  <p class="lead"><span>今週末、子どもとどこ行こう？</span></p>
-  <p class="areas">厚木・海老名・座間・綾瀬・大和・相模原・伊勢原・愛川・清川で開かれる、子ども・親子向けのイベントを毎週まとめています。</p>
-  <a class="go" href="/atsugi-kids/">今週末のイベントを見る →</a>
+  <header>
+    <img src="/favicon.svg" alt="" width="52" height="52">
+    <h1>hibitool<small>ひびツール ― 毎日に使える無料ツール集</small></h1>
+  </header>
+  <p class="lead">今日なにを着るか、夕飯をどうするか、週末どこへ行くか。暮らしと仕事の「ちょっと決めたい」を手伝う、無料のWebツールを集めています。登録やインストールは要りません。</p>
+
+  <h2>暮らし</h2>
+  <ul class="tools">
+    <li><a href="https://fukuso.hibitool.com/"><img src="https://fukuso.hibitool.com/favicon.svg" alt=""><span><span class="n">きょうの服装予報</span><span class="d">天気と体感温度から、半袖か長袖か、上着や傘がいるかを提案。全国15都市。</span></span><span class="host">fukuso.hibitool.com</span></a></li>
+    <li><a href="https://kondate.hibitool.com/"><img src="https://kondate.hibitool.com/favicon.svg" alt=""><span><span class="n">きょうの献立</span><span class="d">冷蔵庫の食材から、主菜・副菜・汁物の組み合わせを提案。1週間の献立と買い物リストも。</span></span><span class="host">kondate.hibitool.com</span></a></li>
+    <li><a href="https://sale.hibitool.com/"><img src="https://sale.hibitool.com/favicon.svg" alt=""><span><span class="n">ネット通販セール暦</span><span class="d">Amazon・楽天・Yahoo!ショッピングなどのセール期間を一覧に。毎週金曜更新。</span></span><span class="host">sale.hibitool.com</span></a></li>
+  </ul>
+
+  <h2>子どもと</h2>
+  <ul class="tools">
+    <li><a href="https://kids.hibitool.com/"><img src="https://kids.hibitool.com/favicon.svg" alt=""><span><span class="n">週末子連れカレンダー 県央版</span><span class="d">厚木・海老名・相模原など神奈川県央の子ども・親子イベントを毎週まとめています。</span></span><span class="host">kids.hibitool.com</span></a></li>
+    <li><a href="https://asobi.hibitool.com/"><img src="https://asobi.hibitool.com/favicon.svg" alt=""><span><span class="n">あそんでまなぼ・おうちじゅけんドリル</span><span class="d">2〜4歳の知育あそびと、小学校受験向けのドリル。</span></span><span class="host">asobi.hibitool.com</span></a></li>
+  </ul>
+
+  <h2>ものづくり・仕事</h2>
+  <ul class="tools">
+    <li><a href="https://ponchie.hibitool.com/"><img src="https://ponchie.hibitool.com/favicon.svg" alt=""><span><span class="n">ポンチ絵工房</span><span class="d">製造現場の説明図（ポンチ絵）や簡単な部品図を、部品を並べて描けるソフト。</span></span><span class="host">ponchie.hibitool.com</span></a></li>
+    <li><a href="https://sankakuhi.hibitool.com/"><img src="https://sankakuhi.hibitool.com/favicon.svg" alt=""><span><span class="n">三角比メーカー</span><span class="d">直角三角形に数値を入れると、辺の長さ・角度・sin・cos・tan を計算。</span></span><span class="host">sankakuhi.hibitool.com</span></a></li>
+  </ul>
+
+  <h2>ひと休み</h2>
+  <ul class="tools">
+    <li><a href="https://catchball.hibitool.com/"><img src="https://catchball.hibitool.com/favicon.svg" alt=""><span><span class="n">キャッチボール日和</span><span class="d">ぼーっと眺める3Dのキャッチボール。途中から参加もできます。</span></span><span class="host">catchball.hibitool.com</span></a></li>
+  </ul>
+
   <footer>
-    <a href="/atsugi-kids/about.html">このサイトについて・お問い合わせ</a>　<a href="/atsugi-kids/privacy.html">プライバシーポリシー</a><br>ほかのツール：<a href="/ponchi-e/">ポンチ絵工房（製造業向けポンチ絵・図面作成）</a>　<a href="/fukuso/">きょうの服装予報（天気から今日の服装を提案）</a>　<a href="/sale-calendar/">ネット通販セール暦（Amazon・楽天・Yahoo!のセール期間）</a>
+    <a href="/about.html">運営者情報・お問い合わせ</a>
+    <a href="/privacy.html">プライバシーポリシー</a>
+    <span>© hibitool</span>
   </footer>
 </div>
 </body>
