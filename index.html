@@ -49,6 +49,11 @@ ul.tools img{width:40px;height:40px;border-radius:8px}
 .host{font-size:12px;color:var(--muted);white-space:nowrap}
 footer{margin-top:40px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
 footer a{color:var(--muted)}
+.guide{margin:-12px 0 24px;font-size:15px}
+.guide a,.more a,.about a{color:var(--accent)}
+ul.tools.yomi a{display:block}
+.more{margin:10px 0 0;font-size:14px}
+.about{font-size:15px;color:var(--muted)}
 @media (max-width:560px){ul.tools a{grid-template-columns:36px minmax(0,1fr)}.host{display:none}ul.tools img{width:36px;height:36px}}
 </style>
 </head>
@@ -59,6 +64,7 @@ footer a{color:var(--muted)}
     <h1>hibitool<small>ひびツール ― 毎日に使える無料ツール集</small></h1>
   </header>
   <p class="lead">今日なにを着るか、夕飯をどうするか、週末どこへ行くか。暮らしと仕事の「ちょっと決めたい」を手伝う、無料のWebツールを集めています。登録やインストールは要りません。</p>
+  <p class="guide">それぞれのツールを作った理由、使い方、どんな基準で答えを出しているかは<a href="/guide/">ツールの紹介</a>で、暮らしの「ちょっと迷う」を調べた記事は<a href="/yomimono/">読み物</a>で読めます。</p>
 
   <h2>暮らし</h2>
   <ul class="tools">
@@ -68,7 +74,6 @@ footer a{color:var(--muted)}
     <li><a href="https://shuppatsu.hibitool.com/"><img src="https://shuppatsu.hibitool.com/favicon.svg" alt=""><span><span class="n">出発時刻アドバイザー</span><span class="d">天気・曜日・五十日・連休から「いつもより10分早めに」を提案。車の外回りの時間帯チェックにも。</span></span><span class="host">shuppatsu.hibitool.com</span></a></li>
     <li><a href="https://gomi.hibitool.com/"><img src="https://gomi.hibitool.com/favicon.svg" alt=""><span><span class="n">ゴミ出しカレンダー</span><span class="d">地区の収集日を登録しておくと「今日は燃えるゴミ」とだけ表示。家族と共有・通知も。</span></span><span class="host">gomi.hibitool.com</span></a></li>
     <li><a href="https://kondate.hibitool.com/"><img src="https://kondate.hibitool.com/favicon.svg" alt=""><span><span class="n">きょうの献立</span><span class="d">冷蔵庫の食材から、主菜・副菜・汁物の組み合わせを提案。1週間の献立と買い物リストも。</span></span><span class="host">kondate.hibitool.com</span></a></li>
-    <li><a href="https://kondate.hibitool.com/roulette/"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='34' r='27' fill='%23c8442c'/%3E%3Cpath d='M32 34L32 7A27 27 0 0 1 58 27z' fill='%23f2b33d'/%3E%3Cpath d='M32 34L5 40A27 27 0 0 1 14 14z' fill='%23fff3dc'/%3E%3Ccircle cx='32' cy='34' r='6' fill='%23fff'/%3E%3C/svg%3E" alt=""><span><span class="n">献立ルーレット</span><span class="d">気温に合わせて「鍋」「冷やし麺」などの晩ごはんのジャンルをルーレットで。冷蔵庫の食材からも。</span></span><span class="host">kondate.hibitool.com/roulette/</span></a></li>
     <li><a href="https://sale.hibitool.com/"><img src="https://sale.hibitool.com/favicon.svg" alt=""><span><span class="n">ネット通販セール暦</span><span class="d">Amazon・楽天・Yahoo!ショッピングなどのセール期間を一覧に。毎週金曜更新。</span></span><span class="host">sale.hibitool.com</span></a></li>
   </ul>
 
@@ -93,13 +98,18 @@ footer a{color:var(--muted)}
     <li><a href="https://sankakuhi.hibitool.com/"><img src="https://sankakuhi.hibitool.com/favicon.svg" alt=""><span><span class="n">三角比メーカー</span><span class="d">直角三角形に数値を入れると、辺の長さ・角度・sin・cos・tan を計算。</span></span><span class="host">sankakuhi.hibitool.com</span></a></li>
   </ul>
 
-  <h2>ひと休み</h2>
-  <ul class="tools">
-    <li><a href="https://catchball.hibitool.com/"><img src="https://catchball.hibitool.com/favicon.svg" alt=""><span><span class="n">キャッチボール日和</span><span class="d">ぼーっと眺める3Dのキャッチボール。途中から参加もできます。</span></span><span class="host">catchball.hibitool.com</span></a></li>
-  </ul>
+  <h2>読み物</h2>
+  <ul class="tools yomi"><!--YOMI--><li><a href="/yomimono/kion-fukuso/"><span class="n">気温別の服装の目安：半袖・長袖・上着は何度で決める？</span><span class="d">気温5℃から30℃まで、何度なら半袖、何度から上着、何度でコートやダウンかを一覧に。最高気温ではなく体感温度と朝晩の寒さで決める理由と、男女・子どもの違い。</span></a></li><li><a href="/yomimono/sentaku-kawaku/"><span class="n">洗濯物が乾きやすい条件：晴れなら乾く、とは限らない</span><span class="d">洗濯物が乾くかどうかを決める「飽差（空気が吸える水分）」「風」「日差し」の3つの条件と、冬や梅雨に外干しで失敗しないコツ、早く乾く部屋干しの方法をまとめました。</span></a></li><li><a href="/yomimono/kodomo-fuku/"><span class="n">子どもの服は大人より1枚少なく？年齢・場面別の目安</span><span class="d">「子どもは大人より1枚少なく」は本当？よく動く子どもの体温の特徴、公園・保育園・お出かけなど場面ごとの服装、マフラーの危険や着替えの準備など、子どもの服選びのコツ。</span></a></li><li><a href="/yomimono/gotobi/"><span class="n">五十日（ごとおび）はなぜ道が混む？</span><span class="d">毎月5日・10日・15日・20日・25日と月末の「五十日」に道が混む理由、土日祝と重なったときの扱い、雨や月曜と重なる日の注意、何分早く出ればいいかの目安をまとめました。</span></a></li><li><a href="/yomimono/gomi-wakekata/"><span class="n">迷いやすいゴミの分け方：電池・ガラス・スプレー缶は何ゴミ？</span><span class="d">乾電池、ボタン電池、モバイルバッテリー、ガラスの破片、スプレー缶、蛍光灯、包丁、保冷剤など、どのゴミに出すか迷いやすいものの分け方と、安全な出し方をまとめました。</span></a></li><li><a href="/yomimono/sale-nenkan/"><span class="n">ネット通販のセールはいつ？1年の流れと待つかどうかの考え方</span><span class="d">Amazon・楽天市場・Yahoo!ショッピングの大きなセールが例年いつごろあるかを、1月から12月までの流れでまとめました。セールを待つか今買うかの考え方と、ポイントの注意点も。</span></a></li><li><a href="/yomimono/kakeibo-1nichi/"><span class="n">給料日まで1日いくら使える？「1日予算」で考える家計管理</span><span class="d">家計簿が続かない人向けに、手取りから固定費と貯金を先に引き、残りを日数で割る「1日予算」の考え方を紹介。計算例、給料日が土日のときのずれ、続けるコツ。</span></a></li><li><a href="/yomimono/asa-junbi/"><span class="n">朝の準備を5分短くする「見る順番」と前の晩の段取り</span><span class="d">天気・運行情報・予定・服装を、出かける前のどの順番で確かめると迷わないか。朝のスマホ確認を短くする工夫と、前の晩にやっておくと朝が楽になる段取りをまとめました。</span></a></li><!--/YOMI--></ul>
+  <p class="more"><a href="/yomimono/">読み物をすべて見る →</a>　<a href="/guide/">ツールの紹介を見る →</a></p>
+
+  <h2>このサイトについて</h2>
+  <p class="about">hibitool（ひびツール）は、神奈川県の県央エリアで子育てをしながら、ものづくりの仕事をしている「けんつ」が個人で運営しています。朝の服装、洗濯、ゴミの日、夕飯、週末の行き先といった毎日の小さな迷いを、自分や家族が実際に困ったことから道具にして、毎日使いながら直しています。家計・睡眠・日記などの記録はお使いの端末の中だけに保存し、サーバーには送りません。<a href="/about.html">運営者情報</a></p>
 
   <footer>
-    <a href="/about.html">運営者情報・お問い合わせ</a>
+    <a href="/guide/">ツールの紹介</a>
+    <a href="/yomimono/">読み物</a>
+    <a href="/about.html">運営者情報</a>
+    <a href="/contact.html">お問い合わせ</a>
     <a href="/privacy.html">プライバシーポリシー</a>
     <span>© hibitool</span>
   </footer>

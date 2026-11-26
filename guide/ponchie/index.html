@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-3965836277553422">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3965836277553422" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ポンチ絵工房の紹介｜製造現場の説明図と簡単な部品図をブラウザで描く｜hibitool</title>
+<meta name="description" content="部品を並べて製造現場の説明図（ポンチ絵）や寸法入りの簡単な部品図を描けるブラウザ用ソフト「ポンチ絵工房」。作った理由、できること、Excel・PowerPointへの貼り付け方。">
+<link rel="canonical" href="https://hibitool.com/guide/ponchie/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="hibitool（ひびツール）"><meta property="og:title" content="ポンチ絵工房の紹介｜製造現場の説明図と簡単な部品図をブラウザで描く｜hibitool"><meta property="og:description" content="部品を並べて製造現場の説明図（ポンチ絵）や寸法入りの簡単な部品図を描けるブラウザ用ソフト「ポンチ絵工房」。作った理由、できること、Excel・PowerPointへの貼り付け方。"><meta property="og:url" content="https://hibitool.com/guide/ponchie/"><meta property="og:locale" content="ja_JP">
+<meta name="theme-color" content="#24466b">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "「ポンチ絵工房」の紹介：現場の説明図を、CADなしで手早く", "description": "部品を並べて製造現場の説明図（ポンチ絵）や寸法入りの簡単な部品図を描けるブラウザ用ソフト「ポンチ絵工房」。作った理由、できること、Excel・PowerPointへの貼り付け方。", "datePublished": "2026-11-26", "dateModified": "2026-11-26", "author": {"@type": "Person", "name": "けんつ", "url": "https://hibitool.com/about.html"}, "publisher": {"@type": "Organization", "name": "hibitool", "url": "https://hibitool.com/", "logo": {"@type": "ImageObject", "url": "https://hibitool.com/icon-192.png"}}, "mainEntityOfPage": "https://hibitool.com/guide/ponchie/", "inLanguage": "ja"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "hibitool", "item": "https://hibitool.com/"}, {"@type": "ListItem", "position": 2, "name": "ツールの紹介", "item": "/guide/"}, {"@type": "ListItem", "position": 3, "name": "「ポンチ絵工房」の紹介：現場の説明図を、CADなしで手早く", "item": "https://hibitool.com/guide/ponchie/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "正式な図面として使えますか？", "acceptedAnswer": {"@type": "Answer", "text": "説明用・打ち合わせ用の図を想定しています。公差や表面粗さの記号など、正式な図面に必要な情報は入れられないものがあるため、製作用の図面はCADで作成してください。"}}, {"@type": "Question", "name": "描いた図はサーバーに送られますか？", "acceptedAnswer": {"@type": "Answer", "text": "送られません。図はお使いのブラウザの中で描かれ、保存もブラウザの中かお使いのパソコンのファイルだけです。"}}, {"@type": "Question", "name": "スマホでも使えますか？", "acceptedAnswer": {"@type": "Answer", "text": "表示はできますが、細かい作業はパソコンのほうが向いています。"}}]}</script>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#1c2733;--muted:#5d6874;--line:#d6dde4;--accent:#24466b;--mark:#fff3c4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--mark:#3a3420;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--mark:#3a3420;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;line-height:1.9;font-size:16px}
+a{color:var(--accent)}
+.bar{border-bottom:1px solid var(--line);background:var(--paper)}
+.bar .in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar .logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--ink);text-decoration:none;font-size:18px}
+.bar .logo img{width:28px;height:28px}
+.bar nav{margin-left:auto;display:flex;gap:12px;font-size:13px}
+.bar nav a{color:var(--muted)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+.crumb{font-size:12px;color:var(--muted);margin:16px 0 0}.crumb a{color:var(--muted)}
+h1{font-size:clamp(23px,4.6vw,30px);line-height:1.45;margin:8px 0 10px;letter-spacing:.01em}
+.meta{font-size:13px;color:var(--muted);margin:0 0 18px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.lead{font-size:17px}
+h2{font-size:20px;margin:40px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);line-height:1.5}
+h3{font-size:17px;margin:26px 0 6px;color:var(--accent)}
+p{margin:12px 0}
+ul,ol{padding-left:1.4em}li{margin:4px 0}
+strong{background:linear-gradient(transparent 60%,var(--mark) 60%);font-weight:700}
+figure{margin:20px 0;text-align:center}
+figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+figure.phone img{max-width:340px;width:100%}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.tbl{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;background:var(--paper);font-size:15px;line-height:1.6}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+thead th{background:var(--accent);color:#fff;white-space:nowrap}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) thead th{color:#11161c}}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;margin:8px 0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#11161c}}
+.faq dt{font-weight:700;margin-top:16px}
+.faq dt::before{content:"Q. ";color:var(--accent)}
+.faq dd{margin:4px 0 0;padding-left:1.6em;text-indent:-1.6em}
+.faq dd::before{content:"A. ";color:var(--muted);font-weight:700}
+.box{background:var(--paper);border:1px solid var(--line);padding:14px 18px;margin:18px 0}
+.box h3{margin-top:0}
+.author{display:flex;gap:14px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:16px;margin:36px 0 0;font-size:14px;line-height:1.8}
+.author img{width:44px;height:44px;flex:none}
+.author b{font-size:15px}
+.rel{list-style:none;padding:0;margin:0;background:var(--paper);border:1px solid var(--line)}
+.rel li{margin:0}.rel li+li{border-top:1px solid var(--line)}
+.rel a{display:block;padding:12px 16px;text-decoration:none;color:var(--ink)}
+.rel a b{color:var(--accent)}.rel a span{display:block;font-size:13px;color:var(--muted);line-height:1.6}
+footer{max-width:760px;margin:0 auto;padding:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in"><a class="logo" href="/"><img src="/favicon.svg" alt="" width="28" height="28">hibitool</a><nav><a href="/">ツール一覧</a><a href="/yomimono/">読み物</a><a href="/about.html">運営者</a></nav></div></div>
+<main class="wrap">
+<p class="crumb"><a href="/">hibitool</a> ＞ <a href="/guide/">ツールの紹介</a> ＞ 「ポンチ絵工房」の紹介：現場の説明図を、CADなしで手早く</p>
+<h1>「ポンチ絵工房」の紹介：現場の説明図を、CADなしで手早く</h1>
+<p class="meta">2026.11.26 公開　文：けんつ</p>
+<p class="lead">打ち合わせや見積もりの場面で「ちょっと図で説明したい」ことはよくあります。でも、そのためにCADを開くのは大げさです。ポンチ絵工房は、部品を並べて線を引くだけで、説明用の図（ポンチ絵）や寸法入りの簡単な部品図を描けるソフトです。</p>
+<h2>作った理由</h2>
+<p>ものづくりの仕事では、お客さまや協力会社に形や仕組みを伝える場面がたくさんあります。手描きの図を写真に撮って送ると線がゆがんで読みにくく、Excel の図形で描くと寸法線や穴の中心線を描くのにとても時間がかかります。CADは正確ですが、ソフトのない人には開けませんし、操作にも慣れが必要です。</p>
+<p>そこで、<strong>ブラウザだけで動き、製造現場でよく使う部品や記号がすぐ出せて、そのまま Excel や PowerPoint に貼れる</strong>道具を作りました。</p>
+<h2>できること</h2>
+<figure><img src="/guide/img/ponchie.jpg" alt="ポンチ絵工房の画面（部品図の見本）" loading="lazy" width="500"><figcaption>ポンチ絵工房の画面（部品図の見本）</figcaption></figure>
+<ul><li>部品の図形（ボルト・歯車・シリンダ・モーター・センサ・金型・プレス機・旋盤・マシニング・ロボット・コンベア・フォークリフト・作業者・工程矢印・吹き出しなど）を並べて説明図を描く</li><li>線・円・円弧・四角で形を描き、方眼に吸着させてきれいにそろえる</li><li><strong>寸法線</strong>（長さは方眼の縮尺から自動でmm表示）、角度寸法、引出線（穴に当てると「φ」を自動で表示）</li><li>中心線、穴と中心線、角のR・面取り</li><li>写真を下絵にして、その上に図を重ねる</li><li>手描き風の線にする切り替え</li></ul>
+<p>「新規」から「見本：部品図」を選ぶと、寸法入りの例が開くので、どんなことができるかがすぐにわかります。</p>
+<p><a class="btn" href="https://ponchie.hibitool.com/">ポンチ絵工房を開く →</a></p>
+<h2>できた図の使い方</h2>
+<ul><li><strong>画像コピー</strong>：Excel・PowerPoint・メールにそのまま貼り付けられます。</li><li><strong>PNG・SVGで保存</strong>：資料やWebページに使えます。SVGは拡大しても線がぼやけません。</li><li><strong>作業データの保存</strong>：あとで直せるように、図をファイルに保存して読み込めます。描いている途中の図は、ブラウザに自動で保存されます。</li></ul>
+<h2>使ってみてわかったこと</h2>
+<p>見積もりの依頼で「この部分をこう加工したい」と伝えるとき、寸法を入れた簡単な図があるだけで、電話でのやり取りが半分になりました。正式な図面はCADで描くとしても、その前の打ち合わせの段階では、ポンチ絵で十分なことが多いと感じています。</p>
+<p>ポンチ絵の描き方のコツは、読み物の<a href="/yomimono/ponchie-kakikata/">伝わるポンチ絵の描き方</a>にまとめています。</p>
+<h2>こんな人に向いています</h2>
+<ul><li>製造業の営業・技術・購買で、形を図で説明する場面が多い人</li><li>CADを持っていない、または打ち合わせの段階でCADを開くのが大げさだと感じる人</li><li>改善提案や作業手順書に、簡単な図を入れたい人</li><li>協力会社に加工を依頼するとき、寸法入りのラフ図を送りたい人</li></ul>
+<h2>よく使う場面の例</h2>
+<ul><li>見積もり依頼の図：外形と穴の位置、相談したい寸法に「？」をつけて送る</li><li>改善提案書：今のやり方と、改善後のやり方を2枚並べる</li><li>不具合の報告：現物の写真を下絵にして、問題の場所に矢印と寸法を描き込む</li></ul>
+<h2>よくある質問</h2><dl class="faq"><dt>正式な図面として使えますか？</dt><dd>説明用・打ち合わせ用の図を想定しています。公差や表面粗さの記号など、正式な図面に必要な情報は入れられないものがあるため、製作用の図面はCADで作成してください。</dd><dt>描いた図はサーバーに送られますか？</dt><dd>送られません。図はお使いのブラウザの中で描かれ、保存もブラウザの中かお使いのパソコンのファイルだけです。</dd><dt>スマホでも使えますか？</dt><dd>表示はできますが、細かい作業はパソコンのほうが向いています。</dd></dl>
+<div class="author"><img src="/favicon.svg" alt="" width="44" height="44"><div><b>この記事を書いた人：けんつ</b><br>hibitool の運営者。神奈川県の県央エリアで子育てをしながら、ものづくりの仕事をしています。自分や家族が毎日「ちょっと迷う」ことを手伝う道具を作って、無料で公開しています。<a href="/about.html">運営者情報</a></div></div>
+<h2>あわせて読みたい</h2>
+<ul class="rel"><li><a href="/guide/sankakuhi/"><b>三角比メーカーの紹介</b><span>直角三角形の図に辺の長さや角度を2つ入れると、残りの辺・角度とsin・cos・tanを計算する「三角比メーカー」。√や分数のままの答え、現場で使う計算例。</span></a></li><li><a href="/yomimono/ponchie-kakikata/"><b>伝わるポンチ絵の描き方：製造現場の説明図のコツ</b><span>ポンチ絵とは、形や仕組みを伝えるための簡単な説明図のこと。打ち合わせや見積もり依頼で「伝わる」ポンチ絵を描くための、視点の選び方・線の使い分け・寸法の入れ方など5つのコツ。</span></a></li><li><a href="/yomimono/sankakuhi-genba/"><b>現場で使う三角比：勾配・テーパー・面取りの計算</b><span>sin・cos・tan は製造や建築の現場でどう使う？勾配の角度、テーパーの直径差、C面取りの斜辺、傾いた基準からの穴の位置など、よく出る計算を例つきで説明します。</span></a></li></ul>
+</main>
+<footer><a href="/">ツール一覧</a><a href="/guide/">ツールの紹介</a><a href="/yomimono/">読み物</a><a href="/about.html">運営者情報</a><a href="/contact.html">お問い合わせ</a><a href="/privacy.html">プライバシーポリシー</a><span>© hibitool</span></footer>
+</body>
+</html>

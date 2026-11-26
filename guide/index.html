@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-3965836277553422">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3965836277553422" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ツールの紹介｜hibitool（ひびツール）</title>
+<meta name="description" content="hibitool の各ツールを、作った理由・使い方・判定の仕組み・よくある質問と一緒に紹介します。">
+<link rel="canonical" href="https://hibitool.com/guide/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="hibitool（ひびツール）"><meta property="og:title" content="ツールの紹介｜hibitool（ひびツール）"><meta property="og:description" content="hibitool の各ツールを、作った理由・使い方・判定の仕組み・よくある質問と一緒に紹介します。"><meta property="og:url" content="https://hibitool.com/guide/"><meta property="og:locale" content="ja_JP">
+<meta name="theme-color" content="#24466b">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "hibitool", "item": "https://hibitool.com/"}, {"@type": "ListItem", "position": 2, "name": "ツールの紹介", "item": "https://hibitool.com/guide/"}]}</script>
+<style>
+:root{--bg:#f4f6f8;--paper:#fff;--ink:#1c2733;--muted:#5d6874;--line:#d6dde4;--accent:#24466b;--mark:#fff3c4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--mark:#3a3420;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11161c;--paper:#18202a;--ink:#e4eaf0;--muted:#9aa6b2;--line:#2c3744;--accent:#8fb3dc;--mark:#3a3420;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;line-height:1.9;font-size:16px}
+a{color:var(--accent)}
+.bar{border-bottom:1px solid var(--line);background:var(--paper)}
+.bar .in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar .logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--ink);text-decoration:none;font-size:18px}
+.bar .logo img{width:28px;height:28px}
+.bar nav{margin-left:auto;display:flex;gap:12px;font-size:13px}
+.bar nav a{color:var(--muted)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+.crumb{font-size:12px;color:var(--muted);margin:16px 0 0}.crumb a{color:var(--muted)}
+h1{font-size:clamp(23px,4.6vw,30px);line-height:1.45;margin:8px 0 10px;letter-spacing:.01em}
+.meta{font-size:13px;color:var(--muted);margin:0 0 18px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.lead{font-size:17px}
+h2{font-size:20px;margin:40px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);line-height:1.5}
+h3{font-size:17px;margin:26px 0 6px;color:var(--accent)}
+p{margin:12px 0}
+ul,ol{padding-left:1.4em}li{margin:4px 0}
+strong{background:linear-gradient(transparent 60%,var(--mark) 60%);font-weight:700}
+figure{margin:20px 0;text-align:center}
+figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+figure.phone img{max-width:340px;width:100%}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.tbl{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;background:var(--paper);font-size:15px;line-height:1.6}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+thead th{background:var(--accent);color:#fff;white-space:nowrap}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) thead th{color:#11161c}}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;margin:8px 0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#11161c}}
+.faq dt{font-weight:700;margin-top:16px}
+.faq dt::before{content:"Q. ";color:var(--accent)}
+.faq dd{margin:4px 0 0;padding-left:1.6em;text-indent:-1.6em}
+.faq dd::before{content:"A. ";color:var(--muted);font-weight:700}
+.box{background:var(--paper);border:1px solid var(--line);padding:14px 18px;margin:18px 0}
+.box h3{margin-top:0}
+.author{display:flex;gap:14px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:16px;margin:36px 0 0;font-size:14px;line-height:1.8}
+.author img{width:44px;height:44px;flex:none}
+.author b{font-size:15px}
+.rel{list-style:none;padding:0;margin:0;background:var(--paper);border:1px solid var(--line)}
+.rel li{margin:0}.rel li+li{border-top:1px solid var(--line)}
+.rel a{display:block;padding:12px 16px;text-decoration:none;color:var(--ink)}
+.rel a b{color:var(--accent)}.rel a span{display:block;font-size:13px;color:var(--muted);line-height:1.6}
+footer{max-width:760px;margin:0 auto;padding:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in"><a class="logo" href="/"><img src="/favicon.svg" alt="" width="28" height="28">hibitool</a><nav><a href="/">ツール一覧</a><a href="/yomimono/">読み物</a><a href="/about.html">運営者</a></nav></div></div>
+<main class="wrap"><p class="crumb"><a href="/">hibitool</a> ＞ ツールの紹介</p><h1>ツールの紹介</h1><p class="meta">作った理由・使い方・判定の仕組み</p><p>hibitool のツールは、どれも「毎日ちょっと迷うこと」を短い時間で決めるために作りました。ここでは、ツールごとに、なぜ作ったか、どう使うか、どんな計算や基準で答えを出しているかを、画面の写真つきで説明しています。</p><h2>暮らし</h2><ul class="rel"><li><a href="/guide/kesa/"><b>けさの一枚</b><span>気象庁の予報から今日の気温と雨の時間、鉄道会社の運行情報への近道、自分だけの予定、1日3問の学びを1枚にまとめた「けさの一枚」。作った理由と使い方。</span></a></li><li><a href="/guide/fukuso/"><b>きょうの服装予報</b><span>天気予報の体感温度から、今日のトップス・上着・ボトムス・持ち物を提案する「きょうの服装予報」。作った理由、使い方、気温の区切り、よくある質問をまとめました。</span></a></li><li><a href="/guide/sentaku/"><b>洗濯指数ボード</b><span>気温・湿度・風・日差し・降水確率から1時間ごとの乾きやすさを計算し、外干しOKか部屋干しか、干す時間帯と取り込む時刻を出す「洗濯指数ボード」の使い方と仕組み。</span></a></li><li><a href="/guide/shuppatsu/"><b>出発時刻アドバイザー</b><span>天気・曜日・五十日・連休・学校の休みから「今日はいつもより10分早めに」を提案する「出発時刻アドバイザー」。作った理由、使い方、何％上乗せするかの基準。</span></a></li><li><a href="/guide/gomi/"><b>ゴミ出しカレンダー</b><span>地区の収集日を一度登録すれば「今日は燃えるゴミ」とだけ表示する「ゴミ出しカレンダー」。毎週・第◯曜日・隔週の登録方法、家族との共有、通知、迷いやすいゴミ47品の分け方。</span></a></li><li><a href="/guide/kondate/"><b>きょうの献立</b><span>冷蔵庫にある食材を選ぶと、主菜・副菜・汁物の組み合わせを提案する「きょうの献立」。166品の料理、和洋中・韓国・タイなど7ジャンル、1週間の献立と買い物リストの使い方。</span></a></li><li><a href="/guide/sale/"><b>ネット通販セール暦</b><span>Amazon・楽天市場・Yahoo!ショッピングなどのセール期間を1つのカレンダーにまとめた「ネット通販セール暦」。毎週金曜更新、今後の予想、スマホのカレンダーへの登録方法。</span></a></li></ul><h2>毎日の記録</h2><ul class="rel"><li><a href="/guide/okane/"><b>お金ナビ</b><span>手取り・固定費・毎月の貯金から「給料日まで今日使っていい額」を毎日出す「お金ナビ」。計算式、土日祝の引き落とし日のずれ、使い方とよくある質問。</span></a></li><li><a href="/guide/dandori/"><b>今日の段取り</b><span>今日やることを3つだけ決め、締め切りまでの日数、誕生日・記念日、しばらく連絡していない人をまとめて表示する「今日の段取り」。作った理由と使い方。</span></a></li><li><a href="/guide/suimin/"><b>睡眠ログ</b><span>「今から寝る」「起きた」を押すだけで睡眠時間を記録し、1週間の平均・寝る時刻のばらつき・睡眠負債から今夜の寝る時刻の目安を出す「睡眠ログ」の使い方と計算方法。</span></a></li><li><a href="/guide/quiz/"><b>1日3問クイズ</b><span>ビジネス用語・漢字の読み・ことわざ慣用句・四字熟語から毎日3問出る「1日3問クイズ」。作った理由、問題の選び方、正解率と連続日数の記録について。</span></a></li><li><a href="/guide/nikki/"><b>ひとこと日記</b><span>1日1行・140字までの日記と気分の記録。「1年前の今日」「1か月前」「1週間前」に書いたことが毎日読める「ひとこと日記」の使い方と、続けるコツ。</span></a></li></ul><h2>子どもと</h2><ul class="rel"><li><a href="/guide/kids/"><b>週末子連れカレンダー 県央版</b><span>厚木・海老名・座間・綾瀬・大和・相模原・伊勢原・愛川・清川の子ども・親子イベントを毎週金曜にまとめる「週末子連れカレンダー 県央版」。作った理由、情報の集め方、使い方。</span></a></li><li><a href="/guide/asobi/"><b>あそんでまなぼ</b><span>2〜4歳向けの知育あそび「あそんでまなぼ」と、小学校受験向けの「おうちじゅけんドリル」。年齢に合わせた難しさ、遊べる内容、保護者が気をつけたいこと。</span></a></li></ul><h2>ものづくり・仕事</h2><ul class="rel"><li><a href="/guide/ponchie/"><b>ポンチ絵工房</b><span>部品を並べて製造現場の説明図（ポンチ絵）や寸法入りの簡単な部品図を描けるブラウザ用ソフト「ポンチ絵工房」。作った理由、できること、Excel・PowerPointへの貼り付け方。</span></a></li><li><a href="/guide/sankakuhi/"><b>三角比メーカー</b><span>直角三角形の図に辺の長さや角度を2つ入れると、残りの辺・角度とsin・cos・tanを計算する「三角比メーカー」。√や分数のままの答え、現場で使う計算例。</span></a></li></ul></main><footer><a href="/">ツール一覧</a><a href="/guide/">ツールの紹介</a><a href="/yomimono/">読み物</a><a href="/about.html">運営者情報</a><a href="/contact.html">お問い合わせ</a><a href="/privacy.html">プライバシーポリシー</a><span>© hibitool</span></footer>
+</body>
+</html>
